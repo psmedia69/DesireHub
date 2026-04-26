@@ -57,7 +57,7 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
 
   return (
     <nav className={cn(
-      "fixed z-50 transition-all duration-500 left-1/2 -translate-x-1/2",
+      "sticky z-50 transition-all duration-500 mx-auto",
       isScrolled ? "top-2" : "top-4",
       viewMode === "Phone" ? "w-[calc(100%-1.5rem)] max-w-[400px]" :
       viewMode === "Tab" ? "w-[calc(100%-2rem)] max-w-[800px]" : 
@@ -71,22 +71,22 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
       )}>
         {/* Top Row for Mobile, Left Side for Desktop */}
         <div className={cn(
-          "flex items-center min-w-0",
-          viewMode === "Phone" ? "w-full gap-0 overflow-x-auto [&::-webkit-scrollbar]:hidden justify-start" : "justify-between shrink-0"
+          "flex items-center min-w-0 shrink-0",
+          viewMode === "Phone" ? "w-full gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden justify-start" : "justify-between"
         )}>
           {/* Logo */}
           <div className={cn(
-            "flex flex-col items-center leading-none origin-left shrink-0 cursor-pointer py-1 transition-transform duration-500",
-            viewMode === "Phone" ? "scale-[0.35] -ml-5" : isScrolled ? "scale-[0.5]" : "scale-[0.6]"
+            "flex flex-col items-center leading-none shrink-0 cursor-pointer py-1 transition-all duration-500",
+            viewMode === "Phone" ? "w-[85px] pl-1" : isScrolled ? "w-[100px] scale-90" : "w-[120px]"
           )}>
-            <span className="logo-monogram text-3xl">DH</span>
-            <div className="flex items-baseline mt-[-0.5rem]">
-              <span className="logo-desire text-3xl">Desire</span>
-              <span className="logo-hub text-lg ml-2">HUB</span>
+            <span className={cn("logo-monogram", viewMode === "Phone" ? "text-xl" : "text-3xl")}>DH</span>
+            <div className={cn("flex items-baseline", viewMode === "Phone" ? "mt-0" : "mt-[-0.5rem]")}>
+              <span className={cn("logo-desire", viewMode === "Phone" ? "text-xl" : "text-3xl")}>Desire</span>
+              <span className={cn("logo-hub", viewMode === "Phone" ? "text-xs ml-1" : "text-lg ml-2")}>HUB</span>
             </div>
-            <div className="flex items-center gap-2 mt-2 w-full shrink-0">
+            <div className="flex items-center gap-1 mt-1 w-full shrink-0">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
-              <span className="text-[6px] font-black uppercase tracking-[0.6em] text-gold whitespace-nowrap opacity-90">
+              <span className={cn("font-black uppercase tracking-[0.4em] text-gold whitespace-nowrap opacity-90", viewMode === "Phone" ? "text-[4.5px]" : "text-[6px]")}>
                 Premium Directory
               </span>
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
@@ -96,7 +96,7 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
           {/* Nav Pills */}
           <nav className={cn(
             "flex items-center gap-1 p-1 rounded-full bg-black/80 border border-white/10 shrink-0",
-            viewMode === "Phone" ? "-ml-5" : viewMode === "Tab" ? "-ml-2" : "ml-4 xl:ml-12"
+            viewMode === "Phone" ? "" : viewMode === "Tab" ? "ml-2" : "ml-4 xl:ml-12"
           )}>
             {[
               { id: "Discover", label: "Discover", icon: Compass, onClick: onDiscover },
@@ -165,7 +165,10 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
               viewMode === "Phone" ? "pl-2 border-l" : isScrolled ? "pl-2 border-l" : "pl-4 border-l"
             )}>
               {/* Public Views Counter */}
-              <div className="hidden sm:block text-xs text-right leading-tight pr-3 border-r border-black/10 dark:border-white/10">
+              <div className={cn(
+                "text-right leading-tight pr-2 sm:pr-3 border-r border-black/10 dark:border-white/10",
+                viewMode === "Phone" ? "hidden" : "hidden sm:block"
+              )}>
                 <div className={cn(
                   "font-bold text-white flex items-center gap-1 justify-end transition-all duration-500",
                   isScrolled ? "text-[10px]" : "text-xs"
@@ -178,7 +181,10 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
 
               {user ? (
                 <div className="flex items-center gap-3">
-                  <div className="hidden sm:block text-xs text-right leading-tight">
+                  <div className={cn(
+                    "text-right leading-tight",
+                    viewMode === "Phone" ? "hidden" : "hidden sm:block"
+                  )}>
                     <div className={cn(
                       "font-bold text-gold-gradient flex items-center gap-1 justify-end transition-all duration-500",
                       isScrolled ? "text-[10px]" : "text-xs"
@@ -190,23 +196,29 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
                   </div>
                   <button 
                     onClick={handleLogout}
-                    className="p-2 rounded-full hover:bg-red-500/10 text-red-500 transition-colors"
+                    className={cn("rounded-full hover:bg-red-500/10 text-red-500 transition-colors", viewMode === "Phone" ? "p-1" : "p-2")}
                     title="Sign Out"
                   >
-                    <LogOut className="w-5 h-5" />
+                    <LogOut className={cn(viewMode === "Phone" ? "w-4 h-4" : "w-5 h-5")} />
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-3">
-                  <div className="hidden sm:block text-xs text-right leading-tight group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className={cn(
+                    "text-right leading-tight group-hover:opacity-100 transition-opacity",
+                    viewMode === "Phone" ? "hidden" : "hidden sm:block"
+                  )}>
                     <button onClick={() => setIsLoginOpen(true)} className="font-semibold opacity-60 hover:text-gold transition-colors block ml-auto">Admin Login</button>
                     <div className="opacity-30 font-mono text-[9px] mb-1">AUTHORIZED ONLY</div>
                   </div>
                   <button 
                     onClick={() => setIsLoginOpen(true)}
-                    className="h-10 w-10 glass-panel rounded-full flex items-center justify-center hover:bg-gold/10 transition-colors border-white/10 shrink-0 group"
+                    className={cn(
+                      "glass-panel rounded-full flex items-center justify-center hover:bg-gold/10 transition-colors border-white/10 shrink-0 group",
+                      viewMode === "Phone" ? "h-8 w-8" : "h-10 w-10"
+                    )}
                   >
-                    <ShieldCheck className="w-5 h-5 opacity-40 group-hover:opacity-100 group-hover:text-gold transition-all" />
+                    <ShieldCheck className={cn("opacity-40 group-hover:opacity-100 group-hover:text-gold transition-all", viewMode === "Phone" ? "w-4 h-4" : "w-5 h-5")} />
                   </button>
                 </div>
               )}

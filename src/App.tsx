@@ -344,24 +344,27 @@ export default function App() {
       
       <Toaster theme="dark" position="bottom-center" toastOptions={{ className: 'bg-black/95 border border-gold/20 text-white font-bold px-6 py-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]' }} />
       
-      <Navbar 
-        onSearch={setSearchQuery} 
-        onDiscover={handleDiscover}
-        onTopStars={handleTopStars}
-        onFavorites={handleFavorites}
-        activeFilter={activeFilter}
-        totalClicks={totalClicks}
-        viewMode={viewMode}
-      />
-
       <main className={cn(
-        "relative pt-24 pb-20 mx-auto z-10 transition-all duration-700",
+        "relative mx-auto z-10 transition-all duration-700",
         !isModeSelected && "hidden",
-        viewMode === "Phone" ? "max-w-[400px] px-6 bg-black/40 ring-8 ring-black/80 rounded-[3.5rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] my-8 pt-20" : 
-        viewMode === "Tab" ? "max-w-[800px] px-8 bg-black/10 rounded-[2rem] shadow-2xl my-4 pt-24" : 
-        "max-w-7xl px-6"
+        viewMode === "Phone" ? "max-w-[400px] bg-black/40 ring-8 ring-black/80 rounded-[3.5rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] my-8 pb-20 overflow-hidden" : 
+        viewMode === "Tab" ? "max-w-[800px] bg-black/10 rounded-[2rem] shadow-2xl my-4 pb-20 overflow-hidden" : 
+        "max-w-7xl pb-20"
       )}>
-        {user && (
+        <Navbar 
+          onSearch={setSearchQuery} 
+          onDiscover={handleDiscover}
+          onTopStars={handleTopStars}
+          onFavorites={handleFavorites}
+          activeFilter={activeFilter}
+          totalClicks={totalClicks}
+          viewMode={viewMode}
+        />
+        
+        <div className={cn(
+          viewMode === "Phone" ? "px-6 pt-[180px]" : viewMode === "Tab" ? "px-8 pt-28" : "px-6 pt-28"
+        )}>
+          {user && (
           <AdminPanel onModelAdded={() => {
             fetchSupabaseModels(true);
             fetchTrendingModels();
@@ -699,6 +702,7 @@ export default function App() {
         />
 
         <BackToTop />
+        </div>
       </main>
 
       <footer className="relative py-16 border-t border-black/5 dark:border-white/5 glass-premium z-10 mt-20">

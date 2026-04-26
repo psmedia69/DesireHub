@@ -21,7 +21,7 @@ export default function TrendingSection({ models, onCardClick }: TrendingSection
 
   return (
     <div className="w-full mb-16 relative">
-      <div className="flex items-center gap-4 mb-8 px-2 justify-between">
+      <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 mb-8 px-2 justify-between">
         <div className="flex items-center gap-4">
           <div className="relative">
             <div className="absolute inset-0 bg-gold blur-md opacity-40 animate-pulse" />
@@ -38,7 +38,7 @@ export default function TrendingSection({ models, onCardClick }: TrendingSection
           </div>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-4 ml-auto flex-wrap justify-end">
+        <div className="flex items-center gap-3 ml-auto flex-wrap justify-end sm:flex-nowrap mt-4 sm:mt-0 w-full sm:w-auto">
           <div className="relative rounded-xl overflow-hidden group flex-shrink-0 border border-yellow-500/50">
             <a 
               href="https://t.me/+fiYQGTL55EdkMDI1" 
