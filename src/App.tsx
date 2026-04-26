@@ -364,29 +364,32 @@ export default function App() {
         <div className={cn(
           viewMode === "Phone" ? "px-6 pt-4" : viewMode === "Tab" ? "px-8 pt-28" : "px-6 pt-28"
         )}>
-          <div className="flex flex-col sm:flex-row items-center justify-end gap-3 w-full mb-8 z-20">
-            <div className="relative rounded-xl overflow-hidden group flex-shrink-0 border border-yellow-500/50 w-full sm:w-auto">
-              <a 
-                href="https://t.me/+fiYQGTL55EdkMDI1" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="relative bg-blue-900/60 hover:bg-blue-800/80 text-blue-200 rounded-xl px-0 py-3 sm:px-4 sm:py-2.5 flex items-center justify-center h-full transition-all font-bold text-[13px] sm:text-sm tracking-wide z-10 whitespace-nowrap"
-              >
-                Click to Join in TG
-              </a>
-            </div>
-
-            <div className="relative rounded-xl overflow-hidden group flex-shrink-0 border border-[#ea580c]/50 w-full sm:w-auto">
-              <div className="relative bg-black/90 p-3 sm:p-2.5 flex justify-center flex-wrap sm:flex-nowrap items-center gap-6 sm:gap-3 h-full">
-                <a href="https://www.instagram.com/desirefactoryhub/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#E1306C] transition-colors hover:scale-110 active:scale-95 relative z-10" title="Instagram"><Instagram className="w-5 h-5 sm:w-5 sm:h-5" /></a>
-                <a href="https://www.reddit.com/user/Virtual_Dream_6074/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#FF4500] transition-colors hover:scale-110 active:scale-95 relative z-10" title="Reddit">
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 sm:w-5 sm:h-5"><path d="M22 11.5c0-1.38-1.12-2.5-2.5-2.5-.72 0-1.37.31-1.83.8-1.46-1.07-3.44-1.76-5.63-1.84l1.2-5.65 3.93.84c.05 1.25 1.09 2.25 2.36 2.25 1.31 0 2.37-1.06 2.37-2.37C21.9 4.22 20.84 3.16 19.53 3.16c-1.05 0-1.95.69-2.26 1.63L12.8 3.82c-.17-.04-.34.07-.38.24L11.08 10.3c-2.2.06-4.18.75-5.65 1.83-.45-.49-1.1-.8-1.83-.8-1.38 0-2.5 1.12-2.5 2.5 0 .91.5 1.7 1.22 2.14-.04.22-.06.45-.06.69 0 3.59 4.39 6.5 9.8 6.5s9.8-2.91 9.8-6.5c0-.24-.02-.47-.06-.69.72-.44 1.22-1.23 1.22-2.14zM9 14.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5S9 15.33 9 14.5zm7 3.5c-1.36.91-3.16 1.15-4 1.15-.84 0-2.64-.24-4-1.15-.22-.15-.28-.45-.13-.67.15-.22.45-.28.67-.13 1.1.74 2.55.95 3.46.95.91 0 2.36-.21 3.46-.95.22-.15.52-.09.67.13.15.22.09.52-.13.67zM15 16c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          {/* Social Links - Visible globally in Phone mode, but moved inside TrendingSection for Tab/Desktop */}
+          {viewMode === "Phone" && (
+            <div className="flex flex-col sm:flex-row items-center justify-end gap-3 w-full mb-8 z-20">
+              <div className="relative rounded-xl overflow-hidden group flex-shrink-0 border border-yellow-500/50 w-full sm:w-auto">
+                <a 
+                  href="https://t.me/+fiYQGTL55EdkMDI1" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="relative bg-blue-900/60 hover:bg-blue-800/80 text-blue-200 rounded-xl px-0 py-3 sm:px-4 sm:py-2.5 flex items-center justify-center h-full transition-all font-bold text-[13px] sm:text-sm tracking-wide z-10 whitespace-nowrap"
+                >
+                  Click to Join in TG
                 </a>
-                <a href="https://x.com/Ps2022_24" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors hover:scale-110 active:scale-95 relative z-10" title="X (Twitter)"><Twitter className="w-5 h-5 sm:w-5 sm:h-5" /></a>
-                <a href="https://www.facebook.com/profile.php?id=61580298511422" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#1877F2] transition-colors hover:scale-110 active:scale-95 relative z-10" title="Facebook"><Facebook className="w-5 h-5 sm:w-5 sm:h-5" /></a>
+              </div>
+
+              <div className="relative rounded-xl overflow-hidden group flex-shrink-0 border border-[#ea580c]/50 w-full sm:w-auto">
+                <div className="relative bg-black/90 p-3 sm:p-2.5 flex justify-center flex-wrap sm:flex-nowrap items-center gap-6 sm:gap-3 h-full">
+                  <a href="https://www.instagram.com/desirefactoryhub/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#E1306C] transition-colors hover:scale-110 active:scale-95 relative z-10" title="Instagram"><Instagram className="w-5 h-5 sm:w-5 sm:h-5" /></a>
+                  <a href="https://www.reddit.com/user/Virtual_Dream_6074/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#FF4500] transition-colors hover:scale-110 active:scale-95 relative z-10" title="Reddit">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 sm:w-5 sm:h-5"><path d="M22 11.5c0-1.38-1.12-2.5-2.5-2.5-.72 0-1.37.31-1.83.8-1.46-1.07-3.44-1.76-5.63-1.84l1.2-5.65 3.93.84c.05 1.25 1.09 2.25 2.36 2.25 1.31 0 2.37-1.06 2.37-2.37C21.9 4.22 20.84 3.16 19.53 3.16c-1.05 0-1.95.69-2.26 1.63L12.8 3.82c-.17-.04-.34.07-.38.24L11.08 10.3c-2.2.06-4.18.75-5.65 1.83-.45-.49-1.1-.8-1.83-.8-1.38 0-2.5 1.12-2.5 2.5 0 .91.5 1.7 1.22 2.14-.04.22-.06.45-.06.69 0 3.59 4.39 6.5 9.8 6.5s9.8-2.91 9.8-6.5c0-.24-.02-.47-.06-.69.72-.44 1.22-1.23 1.22-2.14zM9 14.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5S9 15.33 9 14.5zm7 3.5c-1.36.91-3.16 1.15-4 1.15-.84 0-2.64-.24-4-1.15-.22-.15-.28-.45-.13-.67.15-.22.45-.28.67-.13 1.1.74 2.55.95 3.46.95.91 0 2.36-.21 3.46-.95.22-.15.52-.09.67.13.15.22.09.52-.13.67zM15 16c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                  </a>
+                  <a href="https://x.com/Ps2022_24" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors hover:scale-110 active:scale-95 relative z-10" title="X (Twitter)"><Twitter className="w-5 h-5 sm:w-5 sm:h-5" /></a>
+                  <a href="https://www.facebook.com/profile.php?id=61580298511422" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#1877F2] transition-colors hover:scale-110 active:scale-95 relative z-10" title="Facebook"><Facebook className="w-5 h-5 sm:w-5 sm:h-5" /></a>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {user && (
           <AdminPanel onModelAdded={() => {
@@ -396,24 +399,16 @@ export default function App() {
         )}
 
 
-        <TrendingSection models={trendingModels} onCardClick={(m) => setSelectedModelForDetail(m)} />
+        <TrendingSection 
+          models={trendingModels} 
+          onCardClick={(m) => setSelectedModelForDetail(m)} 
+          viewMode={viewMode}
+        />
 
-        <div className={cn(
-          "flex flex-col items-center justify-between gap-6 mb-16 px-2",
-          viewMode !== "Phone" ? "lg:flex-row" : "flex-col",
-          viewMode === "Tab" && "lg:justify-start lg:gap-12"
-        )}>
-          <div className={cn(
-            "flex-1 hidden lg:flex w-full lg:w-auto",
-            viewMode !== "Phone" ? "justify-start" : "justify-center"
-          )}>
-            {/* ViewSwitcher removed as per user request to lock mode after selection */}
-          </div>
-
-          <div className={cn(
-            "flex-[2] flex justify-center w-full lg:w-auto",
-            viewMode === "Tab" && "lg:flex-none lg:justify-start"
-          )}>
+        {/* Filters and Search Area */}
+        <div className="flex flex-col gap-8 mb-16 px-2">
+          {/* Category Filters Row - Locked on top */}
+          <div className="flex justify-center w-full">
             <CategoryFilters 
               selectedCategories={selectedCategories} 
               onCategoriesChange={setSelectedCategories} 
@@ -422,34 +417,71 @@ export default function App() {
             />
           </div>
 
+          {/* Sub-Filters Row: Surprise & Sorting */}
           <div className={cn(
-            "flex-1 flex flex-col gap-3 w-full lg:w-auto",
-            viewMode !== "Phone" ? "items-end" : "items-center"
+            "flex items-center justify-between gap-6 w-full",
+            viewMode === "Phone" ? "flex-col" : "flex-row"
           )}>
-            <SortingFilters 
-              sortBy={sortOption}
-              onSortChange={setSortOption}
-            />
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative rounded-[10px] overflow-hidden shrink-0 group border border-orange-400/50"
-            >
-              <button
-                onClick={handleSurpriseMe}
-                disabled={isShuffling}
-                className="relative bg-[#fefce8] text-black/80 w-full h-full text-[11px] font-black uppercase tracking-[0.3em] shadow-[0_10px_30px_-5px_rgba(255,255,255,0.1)] hover:bg-[#fef9c3] transition-all flex items-center justify-center gap-3 disabled:opacity-50 px-8 py-3"
-              >
-                <motion.span 
-                  animate={isShuffling ? { rotate: 360 } : {}}
-                  transition={isShuffling ? { duration: 0.5, repeat: Infinity, ease: "linear" } : {}}
-                  className="group-hover:rotate-180 transition-transform duration-700 text-base"
+            <div className={cn(
+              "flex-1 w-full sm:w-auto",
+              viewMode === "Phone" ? "hidden" : "flex justify-start"
+            )}>
+              {/* Surprise Button for Web and Tab mode */}
+              {(viewMode === "Web" || viewMode === "Tab") && (
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative rounded-[10px] overflow-hidden shrink-0 group border border-orange-400/50"
                 >
-                  🍑
-                </motion.span>
-                {isShuffling ? "Shuffling..." : "Unlock a Surprise"}
-              </button>
-            </motion.div>
+                  <button
+                    onClick={handleSurpriseMe}
+                    disabled={isShuffling}
+                    className="relative bg-[#fefce8] text-black/80 w-full h-full text-[11px] font-black uppercase tracking-[0.3em] shadow-[0_10px_30px_-5px_rgba(255,255,255,0.1)] hover:bg-[#fef9c3] transition-all flex items-center justify-center gap-3 disabled:opacity-50 px-8 py-3"
+                  >
+                    <motion.span 
+                      animate={isShuffling ? { rotate: 360 } : {}}
+                      transition={isShuffling ? { duration: 0.5, repeat: Infinity, ease: "linear" } : {}}
+                      className="group-hover:rotate-180 transition-transform duration-700 text-base"
+                    >
+                      🍑
+                    </motion.span>
+                    {isShuffling ? "Shuffling..." : "Unlock a Surprise"}
+                  </button>
+                </motion.div>
+              )}
+            </div>
+
+            <div className={cn(
+              "flex-1 flex flex-col gap-3 w-full sm:w-auto",
+              viewMode !== "Phone" ? "items-end" : "items-center"
+            )}>
+              <SortingFilters 
+                sortBy={sortOption}
+                onSortChange={setSortOption}
+              />
+              {viewMode === "Phone" && (
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative rounded-[10px] overflow-hidden shrink-0 group border border-orange-400/50"
+                >
+                  <button
+                    onClick={handleSurpriseMe}
+                    disabled={isShuffling}
+                    className="relative bg-[#fefce8] text-black/80 w-full h-full text-[11px] font-black uppercase tracking-[0.3em] shadow-[0_10px_30px_-5px_rgba(255,255,255,0.1)] hover:bg-[#fef9c3] transition-all flex items-center justify-center gap-3 disabled:opacity-50 px-8 py-3"
+                  >
+                    <motion.span 
+                      animate={isShuffling ? { rotate: 360 } : {}}
+                      transition={isShuffling ? { duration: 0.5, repeat: Infinity, ease: "linear" } : {}}
+                      className="group-hover:rotate-180 transition-transform duration-700 text-base"
+                    >
+                      🍑
+                    </motion.span>
+                    {isShuffling ? "Shuffling..." : "Unlock a Surprise"}
+                  </button>
+                </motion.div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -542,7 +574,7 @@ export default function App() {
             "grid gap-8 transition-all duration-500",
             viewMode === "Phone" ? "grid-cols-1" : 
             viewMode === "Tab" ? "grid-cols-3" : 
-            "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+            "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
           )}
         >
           <AnimatePresence mode="popLayout">
