@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Pinyon+Script&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --font-cinzel: "Cinzel", serif;
+  --font-script: "Pinyon Script", cursive;
+  --color-accent: #d4af37; /* Gold accent to match brand */
+  --color-gold: #d4af37;
+  --color-gold-light: #f9f295;
+  --color-gold-dark: #b8860b;
+}
+
+@layer base {
+  :root {
+    --bg-gradient: radial-gradient(circle at 100% 0%, #ffffff 0%, #f3f4f6 50%, #e5e7eb 100%);
+    --text-color: #1a1a1a;
+    --glass-bg: rgba(0, 0, 0, 0.03);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --badge-bg: rgba(0, 0, 0, 0.05);
+    --badge-border: rgba(0, 0, 0, 0.1);
+  }
+
+  .dark {
+    --bg-gradient: radial-gradient(circle at 0% 0%, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    --text-color: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --badge-bg: rgba(255, 255, 255, 0.05);
+    --badge-border: rgba(255, 255, 255, 0.1);
+  }
+
+  body {
+    @apply transition-colors duration-500 min-h-screen font-sans;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    color: var(--text-color);
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-premium {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+      0 10px 40px -10px rgba(0, 0, 0, 0.5),
+      inset 0 1px 1px rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+  }
+
+  .glass-premium:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+    filter: brightness(1.05);
+  }
+
+  button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .btn-gold-glow:hover {
+    background-image: linear-gradient(135deg, #f9f295, #d4af37, #b8860b);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3), 0 0 30px rgba(212, 175, 55, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .premium-overlay {
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .premium-inner-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.06), transparent 70%);
+    z-index: 5;
+  }
+
+  .premium-border {
+    position: relative;
+  }
+
+  .premium-border::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 40%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .dynamic-bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    overflow: hidden;
+    background-color: #030303;
+  }
+
+  .dynamic-bg-blob {
+    position: absolute;
+    width: 70vw;
+    height: 70vw;
+    border-radius: 50%;
+    filter: blur(160px);
+    opacity: 0.09;
+    transition: all 4s cubic-bezier(0.4, 0, 0.2, 1);
+    mix-blend-mode: screen;
+  }
+
+  .badge {
+    @apply px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-widest border transition-all;
+    background: var(--badge-bg);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--badge-border);
+    color: var(--text-color);
+    opacity: 0.7;
+  }
+
+  .badge-active {
+    @apply opacity-100;
+    background: var(--glass-border);
+    border-color: var(--text-color);
+    color: var(--text-color);
+  }
+
+  .text-gold-gradient {
+    background-image: linear-gradient(to bottom right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+  }
+
+  .premium-shadow {
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.4);
+  }
+
+  .shadow-premium {
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3), 0 5px 15px -5px rgba(0, 0, 0, 0.2);
+  }
+
+  .glass-blur {
+    backdrop-filter: blur(16px);
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .premium-glow-gold {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.11), 0 0 30px rgba(212, 175, 55, 0.035);
+  }
+
+  .premium-border {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .logo-monogram {
+    font-family: "Cinzel", serif;
+    font-size: 2.25rem; /* 4xl */
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    background-image: linear-gradient(to bottom right, #bf953f, #fcf6ba, #b38728);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.015;
+    z-index: 50;
+    background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+  }
+
+  .logo-desire {
+    font-family: "Pinyon Script", cursive;
+    font-size: 2.5rem;
+    font-weight: 400;
+    background-image: linear-gradient(to bottom right, #bf953f, #fcf6ba, #b38728);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+    margin-right: -0.2em;
+  }
+
+  .logo-hub {
+    font-family: "Cinzel", serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    filter: drop-shadow(0 0 7px rgba(255,255,255,0.14));
+  }
+
+  .dark .logo-hub {
+    color: #ffffff;
+  }
+}
+
+/* Mesh Overlay effect */
+.mesh-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(at 80% 20%, rgba(242, 125, 38, 0.07) 0%, transparent 40%),
+    radial-gradient(at 20% 80%, rgba(0, 255, 127, 0.035) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
