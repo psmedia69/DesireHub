@@ -733,7 +733,7 @@ export default function App() {
           onRedirect={(model, url) => {
             setRedirectingModel(model);
             setRedirectUrl(url);
-            setRedirectDuration(3000);
+            setRedirectDuration(1000);
           }}
           isFavorite={selectedModelForDetail ? favorites.includes(selectedModelForDetail.id) : false}
           favorites={favorites}
