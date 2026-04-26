@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { ModelProfile } from "@/src/types";
 import { motion, AnimatePresence } from "motion/react";
 import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye } from "lucide-react";
@@ -21,7 +21,7 @@ interface ModelCardProps {
   className?: string;
 }
 
-export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onToggleFavorite, onInteraction, onCardClick, onCountryClick, onRedirect, className }: ModelCardProps) {
+function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onToggleFavorite, onInteraction, onCardClick, onCountryClick, onRedirect, className }: ModelCardProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [localClicks, setLocalClicks] = useState(model.clicks || 0);
@@ -188,6 +188,7 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
         <img
           src={model.thumbnail}
           alt={model.name}
+          loading="lazy"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           referrerPolicy="no-referrer"
         />
@@ -388,3 +389,13 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
     </motion.div>
   );
 }
+
+export default memo(ModelCard, (prevProps, nextProps) => {
+  return (
+    prevProps.model.id === nextProps.model.id &&
+    prevProps.isFavorite === nextProps.isFavorite &&
+    prevProps.isAdmin === nextProps.isAdmin &&
+    prevProps.model.views === nextProps.model.views &&
+    prevProps.model.clicks === nextProps.model.clicks
+  );
+});
