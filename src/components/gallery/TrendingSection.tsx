@@ -39,21 +39,19 @@ export default function TrendingSection({ models, onCardClick }: TrendingSection
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4 ml-auto flex-wrap justify-end">
-          <div className="relative p-[1.5px] rounded-xl overflow-hidden group flex-shrink-0">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0_240deg,#eab308_300deg,#fef08a_360deg)] animate-[spin_3s_linear_infinite]" />
+          <div className="relative rounded-xl overflow-hidden group flex-shrink-0 border border-yellow-500/50">
             <a 
               href="https://t.me/+fiYQGTL55EdkMDI1" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="relative bg-blue-900/60 hover:bg-blue-800/80 text-blue-200 backdrop-blur-md rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-center h-full border border-blue-500/30 transition-all font-bold text-xs sm:text-sm tracking-wide z-10 whitespace-nowrap"
+              className="relative bg-blue-900/60 hover:bg-blue-800/80 text-blue-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-center h-full transition-all font-bold text-xs sm:text-sm tracking-wide z-10 whitespace-nowrap"
             >
               Click to Join in TG
             </a>
           </div>
 
-          <div className="relative p-[1.5px] rounded-xl overflow-hidden group flex-shrink-0">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0_240deg,#ea580c_300deg,#d4af37_360deg)] animate-[spin_3s_linear_infinite]" />
-            <div className="relative bg-black/90 backdrop-blur-md rounded-xl p-2 sm:p-2.5 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 h-full border border-white/5">
+          <div className="relative rounded-xl overflow-hidden group flex-shrink-0 border border-[#ea580c]/50">
+            <div className="relative bg-black/90 p-2 sm:p-2.5 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 h-full">
               <a href="https://www.instagram.com/desirefactoryhub/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#E1306C] transition-colors hover:scale-110 active:scale-95 relative z-10" title="Instagram"><Instagram className="w-4 h-4 sm:w-5 sm:h-5" /></a>
               <a href="https://www.reddit.com/user/Virtual_Dream_6074/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#FF4500] transition-colors hover:scale-110 active:scale-95 relative z-10" title="Reddit">
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M22 11.5c0-1.38-1.12-2.5-2.5-2.5-.72 0-1.37.31-1.83.8-1.46-1.07-3.44-1.76-5.63-1.84l1.2-5.65 3.93.84c.05 1.25 1.09 2.25 2.36 2.25 1.31 0 2.37-1.06 2.37-2.37C21.9 4.22 20.84 3.16 19.53 3.16c-1.05 0-1.95.69-2.26 1.63L12.8 3.82c-.17-.04-.34.07-.38.24L11.08 10.3c-2.2.06-4.18.75-5.65 1.83-.45-.49-1.1-.8-1.83-.8-1.38 0-2.5 1.12-2.5 2.5 0 .91.5 1.7 1.22 2.14-.04.22-.06.45-.06.69 0 3.59 4.39 6.5 9.8 6.5s9.8-2.91 9.8-6.5c0-.24-.02-.47-.06-.69.72-.44 1.22-1.23 1.22-2.14zM9 14.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5S9 15.33 9 14.5zm7 3.5c-1.36.91-3.16 1.15-4 1.15-.84 0-2.64-.24-4-1.15-.22-.15-.28-.45-.13-.67.15-.22.45-.28.67-.13 1.1.74 2.55.95 3.46.95.91 0 2.36-.21 3.46-.95.22-.15.52-.09.67.13.15.22.09.52-.13.67zM15 16c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>

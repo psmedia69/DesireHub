@@ -26,33 +26,13 @@ export default function AgeVerification() {
   return (
     <AnimatePresence>
       {isVisible && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/98 backdrop-blur-2xl"
-          />
-
-          {/* Animated Glows */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <motion.div 
-              animate={{ 
-                scale: [1, 1.2, 1],
-                opacity: [0.07, 0.14, 0.07],
-              }}
-              transition={{ duration: 10, repeat: Infinity }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-gold/10 blur-[150px] rounded-full"
-            />
-          </div>
-
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 bg-black/95">
           {/* Modal Content */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="relative w-full max-w-lg bg-zinc-950 border border-gold/30 rounded-[32px] p-8 md:p-12 shadow-[0_0_70px_rgba(212,175,55,0.11)] text-center overflow-hidden"
+            className="relative w-full max-w-lg bg-zinc-950 border border-gold/30 rounded-[32px] p-8 md:p-12 shadow-2xl text-center overflow-hidden"
           >
             {/* Decorative Corner */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 blur-3xl -mr-16 -mt-16" />

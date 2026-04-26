@@ -330,7 +330,6 @@ export default function App() {
   return (
     <div className="relative min-h-screen selection:bg-gold/30">
       <AgeVerification />
-      <DynamicAtmosphere category={selectedCategories.length === 1 ? selectedCategories[0] as any : "All"} />
       
       <Toaster theme="dark" position="bottom-center" toastOptions={{ className: 'bg-black/95 border border-gold/20 text-white font-bold backdrop-blur-2xl px-6 py-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]' }} />
       
@@ -395,13 +394,12 @@ export default function App() {
             <motion.div
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="relative p-[1.5px] rounded-xl overflow-hidden shrink-0 group"
+              className="relative rounded-[10px] overflow-hidden shrink-0 group border border-orange-400/50"
             >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0_240deg,#fb923c_300deg,#fca5a5_360deg)] animate-[spin_3s_linear_infinite]" />
               <button
                 onClick={handleSurpriseMe}
                 disabled={isShuffling}
-                className="relative bg-[#fefce8] text-black/80 w-full h-full text-[11px] font-black uppercase tracking-[0.3em] rounded-[10px] shadow-[0_10px_30px_-5px_rgba(255,255,255,0.1)] hover:bg-[#fef9c3] transition-all flex items-center justify-center gap-3 border border-black/5 disabled:opacity-50 px-8 py-3"
+                className="relative bg-[#fefce8] text-black/80 w-full h-full text-[11px] font-black uppercase tracking-[0.3em] shadow-[0_10px_30px_-5px_rgba(255,255,255,0.1)] hover:bg-[#fef9c3] transition-all flex items-center justify-center gap-3 disabled:opacity-50 px-8 py-3"
               >
                 <motion.span 
                   animate={isShuffling ? { rotate: 360 } : {}}

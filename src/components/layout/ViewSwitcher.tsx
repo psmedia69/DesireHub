@@ -16,10 +16,9 @@ export default function ViewSwitcher({ currentView, onViewChange }: ViewSwitcher
   ] as const;
 
   return (
-    <div className="relative p-[1.5px] rounded-xl overflow-hidden w-fit shrink-0">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0_240deg,#0ea5e9_300deg,#e0f2fe_360deg)] animate-[spin_3s_linear_infinite]" />
+    <div className="relative rounded-xl overflow-hidden w-fit shrink-0 border border-[#0ea5e9]/50">
       <div className={cn(
-        "relative flex items-center justify-center gap-1 sm:gap-2 bg-black/90 dark:bg-[#111] backdrop-blur-md p-1.5 rounded-xl border border-white/5 h-full w-full",
+        "relative flex items-center justify-center gap-1 sm:gap-2 bg-black/90 dark:bg-[#111] p-1.5 h-full w-full",
         currentView === "Tab" ? "flex-col" : "flex-row"
       )}>
         {options.map((opt) => (

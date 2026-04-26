@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ModelProfile } from "@/src/types";
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { supabase } from "@/src/lib/supabase";
@@ -27,20 +27,6 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
   const [localClicks, setLocalClicks] = useState(model.clicks || 0);
   const [localViews, setLocalViews] = useState(model.views || 0);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
-
-  // 3D Parallax State
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const spotlightX = useMotionValue(0);
-  const spotlightY = useMotionValue(0);
-  
-  const mouseXSpring = useSpring(x, { stiffness: 400, damping: 30 });
-  const mouseYSpring = useSpring(y, { stiffness: 400, damping: 30 });
-  const spotlightXSpring = useSpring(spotlightX, { stiffness: 600, damping: 40 });
-  const spotlightYSpring = useSpring(spotlightY, { stiffness: 600, damping: 40 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
 
   // Derived Status
   const isElite = localClicks >= 100;
@@ -143,33 +129,12 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
     }
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    x.set(mouseX / width - 0.5);
-    y.set(mouseY / height - 0.5);
-    spotlightX.set(mouseX);
-    spotlightY.set(mouseY);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
   return (
     <motion.div 
       id={`model-card-${model.id}`}
       style={{
-        rotateX,
-        rotateY,
         transformStyle: "preserve-3d",
       }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       whileHover={{ 
         y: -10,
         scale: 1.01,
