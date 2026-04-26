@@ -362,7 +362,7 @@ export default function App() {
         />
         
         <div className={cn(
-          viewMode === "Phone" ? "px-6 pt-[180px]" : viewMode === "Tab" ? "px-8 pt-28" : "px-6 pt-28"
+          viewMode === "Phone" ? "px-6 pt-4" : viewMode === "Tab" ? "px-8 pt-28" : "px-6 pt-28"
         )}>
           <div className="flex flex-col sm:flex-row items-center justify-end gap-3 w-full mb-8 z-20">
             <div className="relative rounded-xl overflow-hidden group flex-shrink-0 border border-yellow-500/50 w-full sm:w-auto">

@@ -69,66 +69,78 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
         viewMode === "Phone" ? "flex-col p-2 gap-2" : 
         cn("items-center justify-between px-4 transition-all duration-500", isScrolled ? "h-12" : "h-14")
       )}>
-        {/* Top Row for Mobile, Left Side for Desktop */}
         <div className={cn(
           "flex items-center min-w-0 shrink-0",
-          viewMode === "Phone" ? "w-full gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden justify-start" : "justify-between"
+          viewMode === "Phone" ? "w-full gap-2 justify-between" : "justify-between"
         )}>
-          {/* Logo */}
-          <div className={cn(
-            "flex flex-col items-center leading-none shrink-0 cursor-pointer py-1 transition-all duration-500",
-            viewMode === "Phone" ? "w-[85px] pl-1" : isScrolled ? "w-[100px] scale-90" : "w-[120px]"
-          )}>
-            <span className={cn("logo-monogram", viewMode === "Phone" ? "text-xl" : "text-3xl")}>DH</span>
-            <div className={cn("flex items-baseline", viewMode === "Phone" ? "mt-0" : "mt-[-0.5rem]")}>
-              <span className={cn("logo-desire", viewMode === "Phone" ? "text-xl" : "text-3xl")}>Desire</span>
-              <span className={cn("logo-hub", viewMode === "Phone" ? "text-xs ml-1" : "text-lg ml-2")}>HUB</span>
+          <div className="flex items-center gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            {/* Logo */}
+            <div className={cn(
+              "flex flex-col items-center leading-none shrink-0 cursor-pointer py-1 transition-all duration-500",
+              viewMode === "Phone" ? "w-[80px] pl-1" : isScrolled ? "w-[100px] scale-90" : "w-[120px]"
+            )}>
+              <span className={cn("logo-monogram", viewMode === "Phone" ? "text-xl" : "text-3xl")}>DH</span>
+              <div className={cn("flex items-baseline", viewMode === "Phone" ? "mt-0" : "mt-[-0.5rem]")}>
+                <span className={cn("logo-desire", viewMode === "Phone" ? "text-xl" : "text-3xl")}>Desire</span>
+                <span className={cn("logo-hub", viewMode === "Phone" ? "text-xs ml-1" : "text-lg ml-2")}>HUB</span>
+              </div>
+              <div className="flex items-center gap-1 mt-1 w-full shrink-0">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
+                <span className={cn("font-black uppercase tracking-[0.4em] text-gold whitespace-nowrap opacity-90", viewMode === "Phone" ? "text-[4.5px]" : "text-[6px]")}>
+                  Premium Directory
+                </span>
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
+              </div>
             </div>
-            <div className="flex items-center gap-1 mt-1 w-full shrink-0">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
-              <span className={cn("font-black uppercase tracking-[0.4em] text-gold whitespace-nowrap opacity-90", viewMode === "Phone" ? "text-[4.5px]" : "text-[6px]")}>
-                Premium Directory
-              </span>
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
-            </div>
+  
+            {/* Nav Pills */}
+            <nav className={cn(
+              "flex items-center gap-1 p-1 rounded-full bg-black/80 border border-white/10 shrink-0",
+              viewMode === "Phone" ? "" : viewMode === "Tab" ? "ml-2" : "ml-4 xl:ml-12"
+            )}>
+              {[
+                { id: "Discover", label: "Discover", icon: Compass, onClick: onDiscover },
+                { id: "TopStars", label: "Top Stars", icon: Star, onClick: onTopStars },
+                { id: "Favorites", label: "Bookmarked", icon: Heart, onClick: onFavorites },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    item.onClick();
+                    setIsMenuOpen(false);
+                  }}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3 py-2 rounded-full transition-all duration-300",
+                    activeFilter === item.id ? "bg-white/10 text-white shadow-inner scale-105" : "text-white/60 hover:text-white hover:bg-white/5",
+                    viewMode === "Phone" && "px-2"
+                  )}
+                  title={item.label}
+                >
+                  <item.icon className={cn(
+                    "w-4 h-4 transition-colors shrink-0", 
+                    activeFilter === item.id ? (item.id === "Favorites" ? "text-red-500 fill-red-500" : "text-gold fill-gold/20") : ""
+                  )} />
+                  <span className={cn(
+                    "uppercase tracking-[0.15em] font-black hidden md:block whitespace-nowrap",
+                    viewMode === "Tab" ? "text-[10px]" : "text-[11px]"
+                  )}>
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </nav>
           </div>
 
-          {/* Nav Pills */}
-          <nav className={cn(
-            "flex items-center gap-1 p-1 rounded-full bg-black/80 border border-white/10 shrink-0",
-            viewMode === "Phone" ? "" : viewMode === "Tab" ? "ml-2" : "ml-4 xl:ml-12"
-          )}>
-            {[
-              { id: "Discover", label: "Discover", icon: Compass, onClick: onDiscover },
-              { id: "TopStars", label: "Top Stars", icon: Star, onClick: onTopStars },
-              { id: "Favorites", label: "Bookmarked", icon: Heart, onClick: onFavorites },
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  item.onClick();
-                  setIsMenuOpen(false);
-                }}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-2 rounded-full transition-all duration-300",
-                  activeFilter === item.id ? "bg-white/10 text-white shadow-inner scale-105" : "text-white/60 hover:text-white hover:bg-white/5",
-                  viewMode === "Phone" && "px-2"
-                )}
-                title={item.label}
-              >
-                <item.icon className={cn(
-                  "w-4 h-4 transition-colors shrink-0", 
-                  activeFilter === item.id ? (item.id === "Favorites" ? "text-red-500 fill-red-500" : "text-gold fill-gold/20") : ""
-                )} />
-                <span className={cn(
-                  "uppercase tracking-[0.15em] font-black hidden md:block whitespace-nowrap",
-                  viewMode === "Tab" ? "text-[10px]" : "text-[11px]"
-                )}>
-                  {item.label}
-                </span>
-              </button>
-            ))}
-          </nav>
+          {/* Mobile Total Views Counter (Visible only in top right in Phone mode) */}
+          {viewMode === "Phone" && (
+            <div className="flex flex-col items-end leading-tight shrink-0 pl-2 pr-1 ml-auto">
+              <div className="font-bold text-white flex items-center gap-1 text-[10px]">
+                <Eye className="text-gold w-3 h-3" />
+                {totalClicks.toLocaleString()}
+              </div>
+              <div className="opacity-60 font-black tracking-[0.1em] text-[7px]">TOTAL VIEWS</div>
+            </div>
+          )}
         </div>
 
         {/* Search Bar & Actions Container */}
@@ -166,8 +178,7 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
             )}>
               {/* Public Views Counter */}
               <div className={cn(
-                "text-right leading-tight pr-2 sm:pr-3 border-r border-black/10 dark:border-white/10",
-                viewMode === "Phone" ? "hidden" : "hidden sm:block"
+                "text-right leading-tight pr-2 sm:pr-3 border-r border-black/10 dark:border-white/10 hidden sm:block"
               )}>
                 <div className={cn(
                   "font-bold text-white flex items-center gap-1 justify-end transition-all duration-500",
