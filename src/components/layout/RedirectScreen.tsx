@@ -71,7 +71,7 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black backdrop-blur-3xl"
+            className="absolute inset-0 bg-black/95"
           />
 
           {/* Golden Grid Overlay */}
@@ -79,22 +79,13 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #bf953f 1px, transparent 0)', backgroundSize: '40px 40px' }} 
           />
 
-          {/* Atmospheric Glow */}
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.2, 1],
-              opacity: [0.07, 0.14, 0.07]
-            }}
-            transition={{ duration: 5, repeat: Infinity }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/10 blur-[150px] rounded-full"
-          />
-
           {/* Content Container */}
           <div className="relative w-full max-w-2xl px-6">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -30 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.2 }}
               className="space-y-12"
             >
               {/* Security Header */}

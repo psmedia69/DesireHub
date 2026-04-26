@@ -95,7 +95,7 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
 
           {/* Nav Pills */}
           <nav className={cn(
-            "flex items-center gap-1 p-1 rounded-full bg-black/60 border border-white/10 shrink-0 backdrop-blur-3xl",
+            "flex items-center gap-1 p-1 rounded-full bg-black/80 border border-white/10 shrink-0",
             viewMode === "Phone" ? "-ml-5" : viewMode === "Tab" ? "-ml-2" : "ml-4 xl:ml-12"
           )}>
             {[

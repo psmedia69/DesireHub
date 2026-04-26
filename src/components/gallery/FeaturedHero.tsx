@@ -49,7 +49,7 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
             <Star className="w-3 h-3 fill-current" />
             Pick of the Week
           </div>
-          <div className="px-4 py-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full text-white/70 text-[9px] font-bold uppercase tracking-widest">
+          <div className="px-4 py-2 bg-black/40 border border-white/20 rounded-full text-white/70 text-[9px] font-bold uppercase tracking-widest">
             Elite Member Status
           </div>
         </motion.div>

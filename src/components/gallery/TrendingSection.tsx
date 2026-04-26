@@ -83,13 +83,13 @@ export default function TrendingSection({ models, onCardClick }: TrendingSection
           className="flex gap-4 pointer-events-none"
         >
           {/* Loop structure: Original + Copy */}
-          {[...sortedModels, ...sortedModels, ...sortedModels, ...sortedModels].map((model, idx) => (
+          {[...sortedModels, ...sortedModels].map((model, idx) => (
             <motion.div
               key={`${model.id}-${idx}`}
               whileHover={{ 
-                y: -5, 
-                scale: 1.05,
-                transition: { duration: 0.3 }
+                y: -3, 
+                scale: 1.02,
+                transition: { duration: 0.2 }
               }}
               className="flex-none w-36 group cursor-pointer pointer-events-auto h-fit"
               onClick={() => {
@@ -106,7 +106,7 @@ export default function TrendingSection({ models, onCardClick }: TrendingSection
                   referrerPolicy="no-referrer"
                 />
 
-                <div className="absolute top-2 left-2 z-20 px-1.5 py-0.5 rounded bg-black/60 backdrop-blur-md border border-white/10 text-[7px] font-black font-mono text-gold flex items-center gap-1">
+                <div className="absolute top-2 left-2 z-20 px-1.5 py-0.5 rounded bg-black/80 border border-white/10 text-[7px] font-black font-mono text-gold flex items-center gap-1">
                   <Star className="w-2 h-2 fill-gold stroke-gold" />
                   #{idx % 10 + 1}
                 </div>

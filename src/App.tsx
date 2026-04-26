@@ -10,6 +10,7 @@ import TrendingSection from "./components/gallery/TrendingSection";
 import ModelDetail from "./components/gallery/ModelDetail";
 import DynamicAtmosphere from "./components/layout/DynamicAtmosphere";
 import AgeVerification from "./components/layout/AgeVerification";
+import { ViewModePopup } from "./components/layout/ViewModePopup";
 import RedirectScreen from "./components/layout/RedirectScreen";
 import BackToTop from "./components/ui/BackToTop";
 import { ModelProfile, ModelCategory, SortOption } from "./types";
@@ -26,6 +27,8 @@ export default function App() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [countryFilter, setCountryFilter] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("Web");
+  const [isAgeVerified, setIsAgeVerified] = useState(false);
+  const [isModeSelected, setIsModeSelected] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [editingModel, setEditingModel] = useState<ModelProfile | null>(null);
   const [selectedModelForDetail, setSelectedModelForDetail] = useState<ModelProfile | null>(null);
@@ -329,9 +332,17 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen selection:bg-gold/30">
-      <AgeVerification />
+      <AgeVerification onVerify={() => setIsAgeVerified(true)} />
       
-      <Toaster theme="dark" position="bottom-center" toastOptions={{ className: 'bg-black/95 border border-gold/20 text-white font-bold backdrop-blur-2xl px-6 py-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]' }} />
+      {isAgeVerified && !isModeSelected && (
+        <ViewModePopup onSelect={(mode) => {
+          setViewMode(mode);
+          setIsModeSelected(true);
+          toast.success(`Mode set to ${mode}`, { icon: '🚀' });
+        }} />
+      )}
+      
+      <Toaster theme="dark" position="bottom-center" toastOptions={{ className: 'bg-black/95 border border-gold/20 text-white font-bold px-6 py-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]' }} />
       
       <Navbar 
         onSearch={setSearchQuery} 
@@ -345,6 +356,7 @@ export default function App() {
 
       <main className={cn(
         "relative pt-24 pb-20 mx-auto z-10 transition-all duration-700",
+        !isModeSelected && "hidden",
         viewMode === "Phone" ? "max-w-[400px] px-6 bg-black/40 ring-8 ring-black/80 rounded-[3.5rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] my-8 pt-20" : 
         viewMode === "Tab" ? "max-w-[800px] px-8 bg-black/10 rounded-[2rem] shadow-2xl my-4 pt-24" : 
         "max-w-7xl px-6"
@@ -365,10 +377,10 @@ export default function App() {
           viewMode === "Tab" && "lg:justify-start lg:gap-12"
         )}>
           <div className={cn(
-            "flex-1 flex w-full lg:w-auto",
+            "flex-1 hidden lg:flex w-full lg:w-auto",
             viewMode !== "Phone" ? "justify-start" : "justify-center"
           )}>
-            <ViewSwitcher currentView={viewMode} onViewChange={setViewMode} />
+            {/* ViewSwitcher removed as per user request to lock mode after selection */}
           </div>
 
           <div className={cn(
@@ -540,9 +552,9 @@ export default function App() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ 
-                    duration: 0.6, 
-                    delay: idx * 0.05,
-                    ease: [0.22, 1, 0.36, 1]
+                    duration: 0.3, 
+                    delay: idx * 0.02,
+                    ease: "easeOut"
                   }}
                 >
                   <ModelCard 

@@ -136,13 +136,12 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
         transformStyle: "preserve-3d",
       }}
       whileHover={{ 
-        y: -10,
-        scale: 1.01,
-        transition: { type: "spring", stiffness: 200, damping: 25 }
+        y: -5,
+        transition: { duration: 0.2 }
       }}
-      whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
+      whileTap={{ scale: 0.98 }}
       className={cn(
-        "group relative glass-premium rounded-[32px] overflow-hidden transition-all duration-700 h-fit premium-border",
+        "group relative glass-premium rounded-[32px] overflow-hidden transition-all duration-300 h-fit premium-border",
         model.featured ? "ring-[1px] ring-white/10" : "hover:ring-1 hover:ring-white/20",
         className
       )}
@@ -182,21 +181,14 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
       </div>
 
       {/* Image Container */}
-      <motion.div 
+      <div 
         className="aspect-[4/5] md:aspect-square overflow-hidden relative cursor-pointer"
         onClick={handleExpand}
       >
-        <motion.img
-          initial={{ filter: "blur(4px) brightness(0.9)", scale: 1.05 }}
-          animate={{ filter: "blur(0px) brightness(1)", scale: 1 }}
-          whileHover={{ 
-            scale: 1.08,
-            transition: { duration: 0.8, ease: "easeOut" }
-          }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+        <img
           src={model.thumbnail}
           alt={model.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           referrerPolicy="no-referrer"
         />
         
@@ -249,7 +241,7 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
           <div className="flex flex-col gap-2">
             {model.createdAt && (new Date().getTime() - new Date(model.createdAt).getTime() < 172800000) && (
-              <div className="px-3 py-1 bg-black/60 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-wider rounded-full border border-white/10 flex items-center gap-2 w-fit">
+              <div className="px-3 py-1 bg-black/80 text-white text-[9px] font-bold uppercase tracking-wider rounded-full border border-white/10 flex items-center gap-2 w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                 New
               </div>
@@ -265,7 +257,7 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
                       e.stopPropagation();
                       onEdit(model);
                     }}
-                    className="p-2.5 bg-black/60 hover:bg-gold backdrop-blur-md border border-white/20 hover:border-black/20 rounded-full transition-all text-gold hover:text-black shadow-xl"
+                    className="p-2.5 bg-black/80 hover:bg-gold border border-white/20 hover:border-black/20 rounded-full transition-all text-gold hover:text-black shadow-xl"
                     title="Edit Profile"
                   >
                     <Edit3 className="w-4 h-4" />
@@ -276,7 +268,7 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
                     e.stopPropagation();
                     setShowDeleteConfirm(true);
                   }}
-                  className="p-2.5 bg-black/60 hover:bg-red-500 backdrop-blur-md border border-white/20 hover:border-black/20 rounded-full transition-all text-red-500 hover:text-white shadow-xl"
+                  className="p-2.5 bg-black/80 hover:bg-red-500 border border-white/20 hover:border-black/20 rounded-full transition-all text-red-500 hover:text-white shadow-xl"
                   title="Delete Profile"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -284,14 +276,14 @@ export default function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isF
               </div>
             )}
             {model.featured && (
-              <div className="flex items-center gap-1.5 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full border border-white/10">
+              <div className="flex items-center gap-1.5 px-3 py-1 bg-black/60 rounded-full border border-white/10">
                 <span className="h-1.5 w-1.5 rounded-full bg-green-500" /> 
                 <span className="text-[9px] uppercase font-bold tracking-widest text-white/90">Live</span>
               </div>
             )}
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Info Section - Now below the image */}
       <div className="p-4 flex flex-col gap-3">

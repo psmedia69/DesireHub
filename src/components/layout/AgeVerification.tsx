@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShieldAlert, CheckCircle2, AlertCircle } from 'lucide-react';
 
-export default function AgeVerification() {
+interface AgeVerificationProps {
+  onVerify: () => void;
+}
+
+export default function AgeVerification({ onVerify }: AgeVerificationProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -10,13 +14,16 @@ export default function AgeVerification() {
     if (!verified) {
       setIsVisible(true);
       document.body.style.overflow = 'hidden';
+    } else {
+      onVerify();
     }
-  }, []);
+  }, [onVerify]);
 
   const handleVerify = () => {
     localStorage.setItem('age_verified', 'true');
     setIsVisible(false);
     document.body.style.overflow = 'auto';
+    onVerify();
   };
 
   const handleExit = () => {

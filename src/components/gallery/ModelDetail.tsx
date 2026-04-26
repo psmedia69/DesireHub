@@ -36,7 +36,7 @@ export default function ModelDetail({
     return allModels
       .filter(m => m.category === model.category && m.id !== model.id)
       .sort(() => Math.random() - 0.5)
-      .slice(0, 6);
+      .slice(0, 4);
   }, [model, allModels]);
 
   const galleryImages = useMemo(() => {
@@ -56,27 +56,14 @@ export default function ModelDetail({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+            className="absolute inset-0 bg-black/90"
           />
 
-          {/* Animated Background Glow */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <motion.div 
-              animate={{ 
-                scale: [1, 1.2, 1],
-                opacity: [0.1, 0.2, 0.1],
-                rotate: [0, 90, 0]
-              }}
-              transition={{ duration: 10, repeat: Infinity }}
-              className="absolute top-0 left-0 w-[50%] h-[50%] bg-gold/5 blur-[150px] rounded-full"
-            />
-          </div>
-
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.2 }}
             className="relative w-full max-w-sm max-h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-[1.5rem] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,1)] flex flex-col"
           >
             {/* Header / Close Button */}
@@ -85,7 +72,7 @@ export default function ModelDetail({
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="w-6 h-6 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all"
+                className="w-6 h-6 rounded-full bg-black/80 border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all"
               >
                 <X className="w-3 h-3" />
               </motion.button>
@@ -98,13 +85,10 @@ export default function ModelDetail({
                   className="relative w-full aspect-square overflow-hidden cursor-zoom-in group"
                   onClick={() => setLightboxIndex(0)}
                 >
-                  <motion.img
-                    initial={{ scale: 1.1 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
+                  <img
                     src={model.thumbnail}
                     alt={model.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                    className="w-full h-full object-cover transition-transform duration-700"
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80" />

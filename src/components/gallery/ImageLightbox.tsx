@@ -58,13 +58,13 @@ export default function ImageLightbox({ images, initialIndex, isOpen, onClose }:
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/98"
           onClick={onClose}
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md transition-colors border border-white/20"
+            className="absolute top-6 right-6 z-50 p-3 bg-black/40 hover:bg-black/60 text-white rounded-full transition-colors border border-white/20"
           >
             <X className="w-6 h-6" />
           </button>
@@ -74,13 +74,13 @@ export default function ImageLightbox({ images, initialIndex, isOpen, onClose }:
             <>
               <button
                 onClick={goToPrev}
-                className="absolute left-4 md:left-12 z-50 p-4 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md transition-all border border-white/20 hover:scale-110 active:scale-90 hidden sm:block"
+                className="absolute left-4 md:left-12 z-50 p-4 bg-black/40 hover:bg-black/60 text-white rounded-full transition-all border border-white/20 hover:scale-110 active:scale-90 hidden sm:block"
               >
                 <ChevronLeft className="w-8 h-8" />
               </button>
               <button
                 onClick={goToNext}
-                className="absolute right-4 md:right-12 z-50 p-4 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md transition-all border border-white/20 hover:scale-110 active:scale-90 hidden sm:block"
+                className="absolute right-4 md:right-12 z-50 p-4 bg-black/40 hover:bg-black/60 text-white rounded-full transition-all border border-white/20 hover:scale-110 active:scale-90 hidden sm:block"
               >
                 <ChevronRight className="w-8 h-8" />
               </button>

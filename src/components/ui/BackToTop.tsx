@@ -35,7 +35,7 @@ export default function BackToTop() {
           whileHover={{ scale: 1.1, y: -5 }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollToTop}
-          className="fixed bottom-10 right-10 z-50 p-4 bg-black/60 backdrop-blur-xl border border-white/20 rounded-2xl text-gold shadow-[0_20px_50px_rgba(0,0,0,0.5)] group hover:border-gold transition-colors"
+          className="fixed bottom-10 right-10 z-50 p-4 bg-black/80 border border-white/20 rounded-2xl text-gold shadow-[0_20px_50px_rgba(0,0,0,0.5)] group hover:border-gold transition-colors"
         >
           <div className="relative">
             <ChevronUp className="w-6 h-6 group-hover:-translate-y-1 transition-transform" />
