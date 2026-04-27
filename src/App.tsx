@@ -269,7 +269,7 @@ export default function App() {
     // Default or Popular sorting uses alternating New and Hot logic
     if (sortOption === "newest" || sortOption === "popular") {
       const now = new Date().getTime();
-      const NEW_WINDOW = 64800000; // 18 hours
+      const NEW_WINDOW = 86400000; // 24 hours
 
       // Pool A: New models (within 18 hours), sorted by newest first
       const poolA = [...supabaseModels].filter(m => 
