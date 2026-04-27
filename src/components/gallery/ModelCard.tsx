@@ -174,7 +174,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
           </div>
         )}
         {isTrending && (
-          <div className="relative px-3 py-1 bg-linear-to-r from-blue-500 to-cyan-400 rounded-full flex items-center gap-1 shadow-lg border border-white/20">
+          <div className="relative px-3 py-1 bg-linear-to-r from-pink-500 to-rose-400 rounded-full flex items-center gap-1 shadow-lg border border-white/20">
             <Sparkles className="w-3 h-3 text-white" />
             <span className="text-[10px] font-black tracking-widest text-white uppercase">Trending</span>
           </div>
