@@ -8,6 +8,7 @@ import AdminPanel from "./components/admin/AdminPanel";
 import EditModelModal from "./components/admin/EditModelModal";
 import TrendingSection from "./components/gallery/TrendingSection";
 import ModelDetail from "./components/gallery/ModelDetail";
+import PromotionBanner from "./components/layout/PromotionBanner";
 import SpreadTheWordModal from "./components/layout/SpreadTheWordModal";
 import DynamicAtmosphere from "./components/layout/DynamicAtmosphere";
 import AgeVerification from "./components/layout/AgeVerification";
@@ -432,6 +433,8 @@ export default function App() {
           onCardClick={(m) => setSelectedModelForDetail(m)} 
           viewMode={viewMode}
         />
+
+        <PromotionBanner />
 
         {/* Filters and Search Area */}
         <div className="flex flex-col gap-8 mb-16 px-2">
