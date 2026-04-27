@@ -161,9 +161,9 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
       <div className="absolute top-4 right-4 z-30 flex flex-col items-end gap-2">
         {model.featured && (
           <div className="relative flex items-center justify-center">
-            <div className="relative px-4 py-1.5 bg-linear-to-r from-[#bf953f] via-[#fcf6ba] to-[#b38728] rounded-full flex items-center gap-2 shadow-lg border border-white/40 glass-blur">
-              <Star className="w-3 h-3 text-black fill-black" />
-              <span className="text-[10px] font-black tracking-[0.2em] text-black uppercase">Premium</span>
+            <div className="relative px-4 py-1.5 bg-linear-to-r from-blue-600 via-cyan-400 to-blue-500 rounded-full flex items-center gap-2 shadow-lg border border-white/40 glass-blur">
+              <Star className="w-3 h-3 text-white fill-white" />
+              <span className="text-[10px] font-black tracking-[0.2em] text-white uppercase">Admin's Pick</span>
             </div>
           </div>
         )}
@@ -386,15 +386,19 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
             transition={{ duration: 0.3, ease: "easeOut" }}
             whileTap={{ scale: 0.98 }}
             style={{
-              background: "linear-gradient(135deg, #FFD700, #C9A23F)",
-              color: "black",
-              boxShadow: "0 8px 25px rgba(255, 215, 0, 0.4)"
+              background: model.featured 
+                ? "linear-gradient(135deg, #2563eb, #06b6d4)" 
+                : "linear-gradient(135deg, #FFD700, #C9A23F)",
+              color: model.featured ? "white" : "black",
+              boxShadow: model.featured 
+                ? "0 8px 25px rgba(37, 99, 235, 0.4)" 
+                : "0 8px 25px rgba(255, 215, 0, 0.4)"
             }}
             className="w-full py-4 rounded-2xl text-[10px] sm:text-[11px] md:text-[10px] lg:text-[12px] font-[900] uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.1em] lg:tracking-[0.2em] flex items-center justify-center cursor-pointer whitespace-nowrap group/unlock"
             title={`View ${model.name}'s Profile on Socials`}
           >
             <span className="group-hover/unlock:hidden">
-              {model.featured ? "Unlock Premium Access" : "Unlock Now"}
+              {model.featured ? "Admin's Pick" : "Unlock Now"}
             </span>
             <span className="hidden group-hover/unlock:inline">
               Get Full Access

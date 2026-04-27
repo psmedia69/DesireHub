@@ -94,72 +94,96 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                   <motion.div 
                     animate={{ rotate: 360 }}
                     transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                    className="absolute -inset-4 border border-dashed border-gold/30 rounded-full"
+                    className={cn(
+                      "absolute -inset-4 border border-dashed rounded-full",
+                      model.featured ? "border-blue-500/30" : "border-gold/30"
+                    )}
                   />
-                  <div className="w-20 h-20 rounded-full bg-gold/10 border border-gold flex items-center justify-center relative z-10 shadow-[0_0_20px_rgba(212,175,55,0.22)]">
-                    <ShieldCheck className="w-10 h-10 text-gold" />
+                  <div className={cn(
+                    "w-20 h-20 rounded-full border flex items-center justify-center relative z-10 transition-colors",
+                    model.featured 
+                      ? "bg-blue-600/10 border-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.22)]" 
+                      : "bg-gold/10 border-gold shadow-[0_0_20px_rgba(212,175,55,0.22)]"
+                  )}>
+                    <ShieldCheck className={cn("w-10 h-10", model.featured ? "text-blue-500" : "text-gold")} />
                   </div>
                 </div>
                 
                 <div className="text-center space-y-2">
-                  <div className="flex items-center justify-center gap-3 text-gold">
-                    <span className="h-px w-10 bg-gold/20" />
+                  <div className={cn("flex items-center justify-center gap-3", model.featured ? "text-blue-500" : "text-gold")}>
+                    <span className={cn("h-px w-10", model.featured ? "bg-blue-500/20" : "bg-gold/20")} />
                     <span className="text-[10px] font-black uppercase tracking-[0.5em]">Secure Gateway</span>
-                    <span className="h-px w-10 bg-gold/20" />
+                    <span className={cn("h-px w-10", model.featured ? "bg-blue-500/20" : "bg-gold/20")} />
                   </div>
                   <h1 className="text-3xl font-black text-white uppercase italic tracking-tight">Verifying Link</h1>
                 </div>
               </div>
 
               {/* Transfer Visual */}
-              <div className="flex items-center justify-between gap-8 py-8 px-10 bg-white/5 border border-white/10 rounded-[32px] relative overflow-hidden group">
-                {/* Connecting Lines */}
-                <div className="absolute top-1/2 left-0 right-0 h-px bg-white/5 -translate-y-1/2" />
-                <motion.div 
-                  initial={{ left: "0%" }}
-                  animate={{ left: "100%" }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="absolute top-1/2 w-32 h-px bg-linear-to-r from-transparent via-gold to-transparent -translate-y-1/2 blur-sm"
-                />
-
-                <div className="flex flex-col items-center gap-3 relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-gold/10 border border-gold flex items-center justify-center shadow-2xl">
-                    <Globe className="w-8 h-8 text-gold" />
-                  </div>
-                  <span className="text-[9px] font-black text-white/40 uppercase tracking-widest">Main Directory</span>
-                </div>
-
-                <div className="flex flex-col items-center gap-2 relative z-10">
+                <div className="flex items-center justify-between gap-8 py-8 px-10 bg-white/5 border border-white/10 rounded-[32px] relative overflow-hidden group">
+                  {/* Connecting Lines */}
+                  <div className="absolute top-1/2 left-0 right-0 h-px bg-white/5 -translate-y-1/2" />
                   <motion.div 
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                    className="text-4xl font-black text-gold font-mono italic"
-                  >
-                    {count}s
-                  </motion.div>
-                  <Loader2 className="w-4 h-4 text-gold animate-spin" />
-                </div>
-
-                <div className="flex flex-col items-center gap-3 relative z-10">
-                  <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/20">
-                    <img src={model.thumbnail} alt={model.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    initial={{ left: "0%" }}
+                    animate={{ left: "100%" }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    className={cn(
+                      "absolute top-1/2 w-32 h-px -translate-y-1/2 blur-sm",
+                      model.featured 
+                        ? "bg-linear-to-r from-transparent via-blue-500 to-transparent" 
+                        : "bg-linear-to-r from-transparent via-gold to-transparent"
+                    )}
+                  />
+  
+                  <div className="flex flex-col items-center gap-3 relative z-10">
+                    <div className={cn(
+                      "w-16 h-16 rounded-2xl border flex items-center justify-center shadow-2xl transition-colors",
+                      model.featured ? "bg-blue-600/10 border-blue-500" : "bg-gold/10 border-gold"
+                    )}>
+                      <Globe className={cn("w-8 h-8", model.featured ? "text-blue-500" : "text-gold")} />
+                    </div>
+                    <span className="text-[9px] font-black text-white/40 uppercase tracking-widest">Main Directory</span>
                   </div>
-                  <span className="text-[9px] font-black text-gold uppercase tracking-widest">{model.name}</span>
+  
+                  <div className="flex flex-col items-center gap-2 relative z-10">
+                    <motion.div 
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                      className={cn(
+                        "text-4xl font-black font-mono italic transition-colors",
+                        model.featured ? "text-blue-500" : "text-gold"
+                      )}
+                    >
+                      {count}s
+                    </motion.div>
+                    <Loader2 className={cn("w-4 h-4 animate-spin", model.featured ? "text-blue-500" : "text-gold")} />
+                  </div>
+  
+                  <div className="flex flex-col items-center gap-3 relative z-10">
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/20">
+                      <img src={model.thumbnail} alt={model.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    </div>
+                    <span className={cn("text-[9px] font-black uppercase tracking-widest", model.featured ? "text-blue-500" : "text-gold")}>{model.name}</span>
+                  </div>
                 </div>
-              </div>
 
               {/* Progress & Disclaimer */}
               <div className="space-y-6">
                 <div className="space-y-3">
                   <div className="flex justify-between items-end">
                     <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">Establishing Connection...</span>
-                    <span className="text-[10px] font-black text-gold font-mono">{Math.round(progress)}%</span>
+                    <span className={cn("text-[10px] font-black font-mono", model.featured ? "text-blue-500" : "text-gold")}>{Math.round(progress)}%</span>
                   </div>
                   <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
                     <motion.div 
                       initial={{ width: "0%" }}
                       animate={{ width: `${progress}%` }}
-                      className="h-full bg-linear-to-r from-gold-dark via-gold to-gold-light"
+                      className={cn(
+                        "h-full",
+                        model.featured 
+                          ? "bg-linear-to-r from-blue-700 via-blue-500 to-blue-400" 
+                          : "bg-linear-to-r from-gold-dark via-gold to-gold-light"
+                      )}
                     />
                   </div>
                 </div>
@@ -183,7 +207,12 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                         window.open(model.socials.instagram, '_blank');
                       }
                     }}
-                    className="w-full py-4 bg-gold hover:bg-gold-light text-black font-black uppercase tracking-[0.2em] rounded-2xl shadow-[0_10px_30px_rgba(212,175,55,0.3)] transition-all flex items-center justify-center gap-3 group"
+                    className={cn(
+                      "w-full py-4 font-black uppercase tracking-[0.2em] rounded-2xl transition-all flex items-center justify-center gap-3 group",
+                      model.featured 
+                        ? "bg-blue-600 hover:bg-blue-500 text-white shadow-[0_10px_30px_rgba(37,99,235,0.3)]" 
+                        : "bg-gold hover:bg-gold-light text-black shadow-[0_10px_30px_rgba(212,175,55,0.3)]"
+                    )}
                   >
                     Proceed Now
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

@@ -217,8 +217,8 @@ export default function EditModelModal({ model, isOpen, onClose, onSuccess }: Ed
                       )} />
                     </div>
                     <div>
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-white">Featured Profile</div>
-                      <div className="text-[8px] opacity-40 uppercase">Sticky badge on profile card</div>
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-white">Admin's Pick</div>
+                      <div className="text-[8px] opacity-40 uppercase">Promote this profile to primary hero slots</div>
                     </div>
                   </div>
                 </div>

@@ -59,9 +59,9 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
           transition={{ duration: 1, delay: 0.5 }}
           className="flex flex-wrap items-center gap-4 mb-8"
         >
-          <div className="px-5 py-2 bg-gold rounded-full flex items-center gap-2 text-black font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(212,175,55,0.4)]">
-            <Star className="w-3 h-3 fill-current" />
-            Pick of the Week
+          <div className="px-5 py-2 bg-blue-600 rounded-full flex items-center gap-2 text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(37,99,235,0.4)]">
+            <Star className="w-3 h-3 fill-white" />
+            Admin's Pick
           </div>
           <div className="px-4 py-2 bg-black/40 border border-white/20 rounded-full text-white/70 text-[9px] font-bold uppercase tracking-widest">
             Elite Member Status
@@ -96,9 +96,9 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
             onClick={handleUnlock}
             className="group/btn relative px-10 py-5 overflow-hidden rounded-full shadow-2xl transition-all"
           >
-            <div className="absolute inset-0 bg-white group-hover/btn:bg-gold transition-colors duration-500" />
-            <span className="relative flex items-center gap-3 text-black font-black text-xs uppercase tracking-[0.2em] whitespace-nowrap">
-              <span className="group-hover/btn:hidden">Unlock Premium Access</span>
+            <div className="absolute inset-0 bg-white group-hover/btn:bg-blue-500 transition-colors duration-500" />
+            <span className="relative flex items-center gap-3 text-black group-hover/btn:text-white font-black text-xs uppercase tracking-[0.2em] whitespace-nowrap transition-colors">
+              <span className="group-hover/btn:hidden">Admin's Pick</span>
               <span className="hidden group-hover/btn:block">Get Exclusive Access</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
             </span>

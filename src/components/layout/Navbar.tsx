@@ -88,7 +88,7 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
               <div className="flex items-center gap-1 mt-1 w-full shrink-0">
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
                 <span className={cn("font-black uppercase tracking-[0.4em] text-gold whitespace-nowrap opacity-90", viewMode === "Phone" ? "text-[4.5px]" : "text-[6px]")}>
-                  Premium Directory
+                  Exclusive Directory
                 </span>
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
               </div>

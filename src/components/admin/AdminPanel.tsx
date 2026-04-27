@@ -185,7 +185,7 @@ export default function AdminPanel({ onModelAdded, models = [] }: AdminPanelProp
                   { label: 'Total Engagement', value: stats.totalClicks.toLocaleString(), sub: 'Clicks', icon: TrendingUp, color: 'text-gold' },
                   { label: 'Platform Reach', value: stats.totalViews.toLocaleString(), sub: 'Impressions', icon: Eye, color: 'text-white' },
                   { label: 'Active Creators', value: models.length, sub: 'Listings', icon: Users, color: 'text-white' },
-                  { label: 'Premium Tier', value: stats.featuredCount, sub: 'Featured', icon: Star, color: 'text-amber-500' }
+                  { label: "Admin's Picks", value: stats.featuredCount, sub: 'Featured', icon: Star, color: 'text-blue-500' }
                 ].map((stat, i) => (
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
@@ -355,7 +355,7 @@ export default function AdminPanel({ onModelAdded, models = [] }: AdminPanelProp
                     )} />
                   </div>
                   <div>
-                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gold group-hover:text-white transition-colors">Grant Premium Status</div>
+                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gold group-hover:text-white transition-colors">Admin's Pick</div>
                     <div className="text-[8px] opacity-40 uppercase font-black">Elevates user profile to prominent hero positions</div>
                   </div>
                 </div>

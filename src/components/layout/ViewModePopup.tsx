@@ -11,7 +11,7 @@ export const ViewModePopup: React.FC<ViewModePopupProps> = ({ onSelect }) => {
   const modes = [
     { id: "Phone", name: "Mobile", icon: Smartphone, desc: "Compact Experience" },
     { id: "Tab", name: "Tablet", icon: Tablet, desc: "Balanced Layout" },
-    { id: "Web", name: "Desktop", icon: Monitor, desc: "Full Premium View" }
+    { id: "Web", name: "Desktop", icon: Monitor, desc: "Full Desktop Experience" }
   ] as const;
 
   return (

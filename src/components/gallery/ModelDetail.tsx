@@ -182,12 +182,20 @@ export default function ModelDetail({
                       onClick={handleLinkClick}
                       whileHover={{ scale: 1.02, y: -1 }}
                       whileTap={{ scale: 0.98 }}
-                      className="group relative w-full h-9 bg-linear-to-r from-[#bf953f] via-[#fcf6ba] to-[#b38728] rounded-lg flex items-center justify-center gap-2 overflow-hidden shadow-lg transition-all"
+                      className={cn(
+                        "group relative w-full h-9 rounded-lg flex items-center justify-center gap-2 overflow-hidden shadow-lg transition-all",
+                        model.featured 
+                          ? "bg-linear-to-r from-blue-600 via-cyan-400 to-blue-500" 
+                          : "bg-linear-to-r from-[#bf953f] via-[#fcf6ba] to-[#b38728]"
+                      )}
                     >
-                      <span className="relative z-10 text-[9px] font-black text-black uppercase tracking-[0.2em] italic">
-                        {model.featured ? "Unlock Premium Access" : "Unlock Profile"}
+                      <span className={cn(
+                        "relative z-10 text-[9px] font-black uppercase tracking-[0.2em] italic",
+                        model.featured ? "text-white" : "text-black"
+                      )}>
+                        {model.featured ? "Admin's Pick" : "Unlock Profile"}
                       </span>
-                      <ExternalLink className="relative z-10 w-3 h-3 text-black" />
+                      <ExternalLink className={cn("relative z-10 w-3 h-3", model.featured ? "text-white" : "text-black")} />
                     </motion.button>
 
                     <div className="flex gap-2">

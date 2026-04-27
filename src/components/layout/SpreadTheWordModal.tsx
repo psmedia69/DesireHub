@@ -17,11 +17,11 @@ export default function SpreadTheWordModal({ isOpen, onClose }: SpreadTheWordMod
   const marketingCaptions = [
     {
       title: "The Elite Directory",
-      text: `Check out the new Premium Model Directory! 🥵\nAll the best desi & international models in one place.\n\nVisit now: ${promoLink}\nJoin our TG: https://t.me/+fiYQGTL55EdkMDI1`
+      text: `Check out the new Elite Model Directory! 🥵\nAll the best desi & international models in one place.\n\nVisit now: ${promoLink}\nJoin our TG: https://t.me/+fiYQGTL55EdkMDI1`
     },
     {
       title: "Desire HUB Launch",
-      text: `DESIRE HUB is finally live! 🚀\nPremium directory with high-quality content only.\n\nBrowse models: ${promoLink}\nDon't miss out!`
+      text: `DESIRE HUB is finally live! 🚀\nExclusive directory with high-quality content only.\n\nBrowse models: ${promoLink}\nDon't miss out!`
     },
     {
       title: "Telegram Community",

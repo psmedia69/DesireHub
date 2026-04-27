@@ -820,7 +820,7 @@ export default function App() {
             </div>
           </div>
           <p className="text-sm opacity-50 max-w-md mx-auto leading-relaxed">
-            Premium model and influencer directory. Connect with the best in the industry.
+            Exclusive model and influencer directory. Connect with the best in the industry.
           </p>
           <div className="mt-8 pt-8 border-t border-black/5 dark:border-white/5 text-[10px] uppercase tracking-[0.2em] font-bold opacity-20">
             © 2026 DESIRE HUB INTERNATIONAL. All rights reserved.
