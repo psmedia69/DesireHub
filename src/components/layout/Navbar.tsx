@@ -103,7 +103,6 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
                 { id: "Discover", label: "Discover", icon: Compass, onClick: onDiscover },
                 { id: "TopStars", label: "Top Stars", icon: Star, onClick: onTopStars },
                 { id: "Favorites", label: "Bookmarked", icon: Heart, onClick: onFavorites },
-                { id: "Promote", label: "Promote", icon: Megaphone, onClick: onSpreadTheWord || (() => {}) },
               ].map((item) => (
                 <button
                   key={item.id}
