@@ -5,6 +5,7 @@ import { ModelProfile } from '../../types';
 import { cn } from '../../lib/utils';
 import { isVideoUrl, sanitizeImageUrl } from '../../lib/imageUtils';
 import ModelCard from './ModelCard';
+import { supabase } from '@/src/lib/supabase';
 import ImageLightbox from './ImageLightbox';
 
 interface ModelDetailProps {
@@ -17,6 +18,7 @@ interface ModelDetailProps {
   onToggleFavorite?: (id: string) => void;
   onSelectModel?: (model: ModelProfile) => void;
   onRedirect?: (model: ModelProfile, url: string) => void;
+  onInteraction?: (modelId: string, updates: Partial<ModelProfile>) => void;
 }
 
 export default function ModelDetail({ 
@@ -28,9 +30,38 @@ export default function ModelDetail({
   favorites = [], // Default to empty array
   onToggleFavorite,
   onSelectModel,
-  onRedirect
+  onRedirect,
+  onInteraction
 }: ModelDetailProps) {
   const [lightboxIndex, setLightboxIndex] = useState(-1);
+
+  const handleLinkClick = () => {
+    if (!model || !model.socials?.instagram) return;
+    
+    const url = model.socials.instagram;
+    
+    // 1. Immediate Redirect
+    if (onRedirect) {
+      onRedirect(model, url);
+    } else {
+      window.open(url, '_blank');
+    }
+
+    // 2. Background Track
+    const newClicks = (model.clicks || 0) + 1;
+    onInteraction?.(model.id, { clicks: newClicks });
+    
+    supabase
+      .from('models')
+      .update({ 
+        clicks: newClicks,
+        recent_clicks_24h: (model.recentClicks || 0) + 1
+      })
+      .eq('id', model.id)
+      .then(({ error }) => {
+        if (error) console.error("Background click update failed:", error);
+      });
+  };
 
   const relatedModels = useMemo(() => {
     if (!model) return [];
@@ -148,17 +179,13 @@ export default function ModelDetail({
 
                   <div className="flex flex-col gap-2">
                     <motion.button
-                      onClick={() => {
-                        if (model.socials?.instagram) {
-                          onRedirect?.(model, model.socials.instagram);
-                        }
-                      }}
+                      onClick={handleLinkClick}
                       whileHover={{ scale: 1.02, y: -1 }}
                       whileTap={{ scale: 0.98 }}
                       className="group relative w-full h-9 bg-linear-to-r from-[#bf953f] via-[#fcf6ba] to-[#b38728] rounded-lg flex items-center justify-center gap-2 overflow-hidden shadow-lg transition-all"
                     >
                       <span className="relative z-10 text-[9px] font-black text-black uppercase tracking-[0.2em] italic">
-                        Unlock
+                        {model.featured ? "Unlock Premium Access" : "Unlock Profile"}
                       </span>
                       <ExternalLink className="relative z-10 w-3 h-3 text-black" />
                     </motion.button>

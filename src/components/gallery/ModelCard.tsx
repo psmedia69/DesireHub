@@ -70,33 +70,38 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
     }
   };
 
-  const handleLinkClick = async (e: React.MouseEvent) => {
+  const handleLinkClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    try {
-      const newClicks = localClicks + 1;
-      setLocalClicks(newClicks);
-      onInteraction?.({ clicks: newClicks });
-      
-      const { error: updateError } = await supabase
-        .from('models')
-        .update({ 
-          clicks: newClicks,
-          recent_clicks_24h: (model.recentClicks || 0) + 1
-        })
-        .eq('id', model.id);
-        
-      if (updateError) throw updateError;
+    const url = model.socials?.instagram;
+    if (!url) return;
 
-      if (onRedirect && model.socials?.instagram) {
-        onRedirect(model, model.socials.instagram);
-      } else if (model.socials?.instagram) {
-        window.open(model.socials.instagram, '_blank');
-      }
-    } catch (err) {
-      console.error("Failed to update clicks:", err);
+    // 1. Immediately trigger the redirect/screen
+    if (onRedirect) {
+      onRedirect(model, url);
+    } else {
+      window.open(url, '_blank');
     }
+
+    // 2. Track interaction in background
+    const newClicks = localClicks + 1;
+    setLocalClicks(newClicks);
+    if (onInteraction) {
+      onInteraction({ clicks: newClicks });
+    }
+
+    // Background update to Supabase
+    supabase
+      .from('models')
+      .update({ 
+        clicks: newClicks,
+        recent_clicks_24h: (model.recentClicks || 0) + 1
+      })
+      .eq('id', model.id)
+      .then(({ error }) => {
+        if (error) console.error("Background click update failed:", error);
+      });
   };
 
   const handleDelete = async () => {
@@ -385,10 +390,15 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
               color: "black",
               boxShadow: "0 8px 25px rgba(255, 215, 0, 0.4)"
             }}
-            className="w-full py-4 rounded-2xl text-[10px] sm:text-[11px] md:text-[10px] lg:text-[12px] font-[900] uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.1em] lg:tracking-[0.2em] flex items-center justify-center cursor-pointer whitespace-nowrap"
+            className="w-full py-4 rounded-2xl text-[10px] sm:text-[11px] md:text-[10px] lg:text-[12px] font-[900] uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.1em] lg:tracking-[0.2em] flex items-center justify-center cursor-pointer whitespace-nowrap group/unlock"
             title={`View ${model.name}'s Profile on Socials`}
           >
-            Unlock Premium Access
+            <span className="group-hover/unlock:hidden">
+              {model.featured ? "Unlock Premium Access" : "Unlock Now"}
+            </span>
+            <span className="hidden group-hover/unlock:inline">
+              Get Full Access
+            </span>
           </motion.button>
         </div>
       </div>

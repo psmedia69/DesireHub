@@ -178,10 +178,22 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                   </div>
 
                   <button 
+                    onClick={() => {
+                      if (model.socials?.instagram) {
+                        window.open(model.socials.instagram, '_blank');
+                      }
+                    }}
+                    className="w-full py-4 bg-gold hover:bg-gold-light text-black font-black uppercase tracking-[0.2em] rounded-2xl shadow-[0_10px_30px_rgba(212,175,55,0.3)] transition-all flex items-center justify-center gap-3 group"
+                  >
+                    Proceed Now
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  <button 
                     onClick={onCancel}
                     className="text-[10px] font-black text-white/40 hover:text-white uppercase tracking-[0.3em] transition-colors flex items-center gap-2 group"
                   >
-                    <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
+                    <XIcon className="w-3 h-3 group-hover:rotate-90 transition-transform" />
                     Cancel Redirection
                   </button>
                 </div>
@@ -201,7 +213,7 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
   );
 }
 
-function X({ className }: { className?: string }) {
+function XIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <path d="M18 6L6 18M6 6l12 12" />

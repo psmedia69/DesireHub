@@ -98,7 +98,8 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
           >
             <div className="absolute inset-0 bg-white group-hover/btn:bg-gold transition-colors duration-500" />
             <span className="relative flex items-center gap-3 text-black font-black text-xs uppercase tracking-[0.2em] whitespace-nowrap">
-              Unlock Premium Access
+              <span className="group-hover/btn:hidden">Unlock Premium Access</span>
+              <span className="hidden group-hover/btn:block">Get Exclusive Access</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
             </span>
           </button>

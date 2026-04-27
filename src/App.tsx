@@ -761,6 +761,7 @@ export default function App() {
           isOpen={!!selectedModelForDetail}
           onClose={() => setSelectedModelForDetail(null)}
           onSelectModel={setSelectedModelForDetail}
+          onInteraction={handleModelUpdate}
           onRedirect={(model, url) => {
             setRedirectingModel(model);
             setRedirectUrl(url);
