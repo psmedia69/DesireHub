@@ -4,7 +4,7 @@ import { ModelProfile, ModelCategory } from '../../types';
 import { X, Loader2, Check, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
-import { sanitizeImageUrl } from '../../lib/imageUtils';
+import { sanitizeImageUrl, isVideoUrl } from '../../lib/imageUtils';
 
 interface EditModelModalProps {
   model: ModelProfile | null;
@@ -240,12 +240,23 @@ export default function EditModelModal({ model, isOpen, onClose, onSuccess }: Ed
                     {previewUrl && (
                       <div className="flex justify-center mt-4">
                         <div className="aspect-[4/5] relative rounded-xl overflow-hidden bg-white/5 border border-white/10 w-32 shadow-lg">
-                          <img 
-                            src={previewUrl} 
-                            alt="Preview" 
-                            className="w-full h-full object-cover" 
-                            referrerPolicy="no-referrer"
-                          />
+                          {isVideoUrl(previewUrl) ? (
+                            <video 
+                              src={previewUrl} 
+                              autoPlay 
+                              loop 
+                              muted 
+                              playsInline 
+                              className="w-full h-full object-cover" 
+                            />
+                          ) : (
+                            <img 
+                              src={previewUrl} 
+                              alt="Preview" 
+                              className="w-full h-full object-cover" 
+                              referrerPolicy="no-referrer"
+                            />
+                          )}
                         </div>
                       </div>
                     )}

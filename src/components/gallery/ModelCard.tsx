@@ -5,6 +5,7 @@ import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, Chevro
 import { cn } from "@/src/lib/utils";
 import { supabase } from "@/src/lib/supabase";
 import { toast } from "sonner";
+import { isVideoUrl } from "@/src/lib/imageUtils";
 import ImageLightbox from "./ImageLightbox";
 
 interface ModelCardProps {
@@ -185,13 +186,24 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         className="aspect-[4/5] md:aspect-square overflow-hidden relative cursor-pointer"
         onClick={handleExpand}
       >
-        <img
-          src={model.thumbnail}
-          alt={model.name}
-          loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          referrerPolicy="no-referrer"
-        />
+        {isVideoUrl(model.thumbnail) ? (
+          <video
+            src={model.thumbnail}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+        ) : (
+          <img
+            src={model.thumbnail}
+            alt={model.name}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            referrerPolicy="no-referrer"
+          />
+        )}
         
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />

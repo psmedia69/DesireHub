@@ -4,7 +4,7 @@ import { ModelCategory, ModelProfile } from '../../types';
 import { Plus, X, Loader2, Check, MousePointer2, Star, Eye, TrendingUp, BarChart3, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
-import { sanitizeImageUrl } from '../../lib/imageUtils';
+import { sanitizeImageUrl, isVideoUrl } from '../../lib/imageUtils';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface AdminPanelProps {
@@ -261,7 +261,11 @@ export default function AdminPanel({ onModelAdded, models = [] }: AdminPanelProp
                         <div className="flex items-center gap-4">
                           <div className="text-xl font-black text-gold/30 group-hover:text-gold transition-colors">{idx + 1}</div>
                           <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10">
-                            <img src={model.thumbnail} alt={model.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                            {isVideoUrl(model.thumbnail) ? (
+                              <video src={model.thumbnail} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+                            ) : (
+                              <img src={model.thumbnail} alt={model.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                            )}
                           </div>
                           <div>
                             <div className="font-black text-white text-xs uppercase tracking-widest line-clamp-1">{model.name}</div>
@@ -381,7 +385,11 @@ export default function AdminPanel({ onModelAdded, models = [] }: AdminPanelProp
                       animate={{ scale: 1, opacity: 1 }}
                       className="aspect-[4/5] relative rounded-3xl overflow-hidden bg-white/5 border border-white/10 w-32 shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
                     >
-                      <img src={formData.imageUrl} alt="System Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      {isVideoUrl(formData.imageUrl) ? (
+                        <video src={formData.imageUrl} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+                      ) : (
+                        <img src={formData.imageUrl} alt="System Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      )}
                     </motion.div>
                   </div>
                 )}

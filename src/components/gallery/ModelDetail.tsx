@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Eye, TrendingUp, Sparkles, Share2, Heart, ExternalLink, MapPin, Grid, Camera } from 'lucide-react';
 import { ModelProfile } from '../../types';
 import { cn } from '../../lib/utils';
+import { isVideoUrl } from '../../lib/imageUtils';
 import ModelCard from './ModelCard';
 import ImageLightbox from './ImageLightbox';
 
@@ -85,12 +86,23 @@ export default function ModelDetail({
                   className="relative w-full aspect-square overflow-hidden cursor-zoom-in group"
                   onClick={() => setLightboxIndex(0)}
                 >
-                  <img
-                    src={model.thumbnail}
-                    alt={model.name}
-                    className="w-full h-full object-cover transition-transform duration-700"
-                    referrerPolicy="no-referrer"
-                  />
+                  {isVideoUrl(model.thumbnail) ? (
+                    <video
+                      src={model.thumbnail}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover transition-transform duration-700"
+                    />
+                  ) : (
+                    <img
+                      src={model.thumbnail}
+                      alt={model.name}
+                      className="w-full h-full object-cover transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80" />
                   
                   <div className="absolute bottom-3 left-3 right-3 text-left">

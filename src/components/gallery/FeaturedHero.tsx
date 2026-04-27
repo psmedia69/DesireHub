@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ModelProfile } from '@/src/types';
+import { isVideoUrl } from '@/src/lib/imageUtils';
 import { Star, ArrowRight, Play } from 'lucide-react';
 
 interface FeaturedHeroProps {
@@ -26,12 +27,23 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
     >
       {/* Background Image with Cinematic Effects */}
       <div className="absolute inset-0">
-        <img 
-          src={model.thumbnail} 
-          alt={model.name}
-          className="w-full h-full object-cover transition-transform duration-[4s] ease-out group-hover:scale-110"
-          referrerPolicy="no-referrer"
-        />
+        {isVideoUrl(model.thumbnail) ? (
+          <video
+            src={model.thumbnail}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover transition-transform duration-[4s] ease-out group-hover:scale-110"
+          />
+        ) : (
+          <img 
+            src={model.thumbnail} 
+            alt={model.name}
+            className="w-full h-full object-cover transition-transform duration-[4s] ease-out group-hover:scale-110"
+            referrerPolicy="no-referrer"
+          />
+        )}
         {/* Gradient Overlays */}
         <div className="absolute inset-0 bg-linear-to-r from-black via-black/60 to-transparent" />
         <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/20" />

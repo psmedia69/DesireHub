@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import { isVideoUrl } from '@/src/lib/imageUtils';
 
 interface ImageLightboxProps {
   images: string[];
@@ -87,20 +88,35 @@ export default function ImageLightbox({ images, initialIndex, isOpen, onClose }:
             </>
           )}
 
-          {/* Image */}
+          {/* Media */}
           <div className="relative w-full h-full max-w-7xl max-h-[100vh] flex items-center justify-center p-4 sm:p-12">
-            <motion.img
-              key={currentIndex}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              src={images[currentIndex]}
-              alt={`Gallery image ${currentIndex + 1}`}
-              className="max-w-full max-h-full object-contain drop-shadow-[0_0_50px_rgba(255,255,255,0.1)] rounded-xl"
-              referrerPolicy="no-referrer"
-              onClick={(e) => e.stopPropagation()}
-            />
+            {isVideoUrl(images[currentIndex]) ? (
+              <motion.video
+                key={currentIndex}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                src={images[currentIndex]}
+                autoPlay
+                controls
+                loop
+                className="max-w-full max-h-full object-contain rounded-xl"
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              <motion.img
+                key={currentIndex}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                src={images[currentIndex]}
+                alt={`Gallery content ${currentIndex + 1}`}
+                className="max-w-full max-h-full object-contain drop-shadow-[0_0_50px_rgba(255,255,255,0.1)] rounded-xl"
+                referrerPolicy="no-referrer"
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
           </div>
 
           {/* Swipe indicator for mobile */}
