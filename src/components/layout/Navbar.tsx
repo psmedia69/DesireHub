@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, Menu, X, User, LogOut, ShieldCheck, MousePointer2, Compass, Star, Briefcase, Heart, Eye, Instagram, Twitter, Facebook } from "lucide-react";
+import { Search, Menu, X, User, LogOut, ShieldCheck, MousePointer2, Compass, Star, Briefcase, Heart, Eye, Instagram, Twitter, Facebook, Megaphone } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "@/src/lib/supabase";
 import { cn } from "@/src/lib/utils";
@@ -11,13 +11,14 @@ interface NavbarProps {
   onDiscover: () => void;
   onTopStars: () => void;
   onFavorites: () => void;
+  onSpreadTheWord?: () => void;
   activeFilter?: string;
   totalClicks?: number;
   viewMode?: string;
   models?: ModelProfile[];
 }
 
-export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, activeFilter = "Discover", totalClicks = 0, viewMode = "Web", models = [] }: NavbarProps) {
+export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, onSpreadTheWord, activeFilter = "Discover", totalClicks = 0, viewMode = "Web", models = [] }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -102,6 +103,7 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
                 { id: "Discover", label: "Discover", icon: Compass, onClick: onDiscover },
                 { id: "TopStars", label: "Top Stars", icon: Star, onClick: onTopStars },
                 { id: "Favorites", label: "Bookmarked", icon: Heart, onClick: onFavorites },
+                { id: "Promote", label: "Promote", icon: Megaphone, onClick: onSpreadTheWord || (() => {}) },
               ].map((item) => (
                 <button
                   key={item.id}

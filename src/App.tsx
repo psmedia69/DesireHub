@@ -8,6 +8,8 @@ import AdminPanel from "./components/admin/AdminPanel";
 import EditModelModal from "./components/admin/EditModelModal";
 import TrendingSection from "./components/gallery/TrendingSection";
 import ModelDetail from "./components/gallery/ModelDetail";
+import PromotionBanner from "./components/layout/PromotionBanner";
+import SpreadTheWordModal from "./components/layout/SpreadTheWordModal";
 import DynamicAtmosphere from "./components/layout/DynamicAtmosphere";
 import AgeVerification from "./components/layout/AgeVerification";
 import { ViewModePopup } from "./components/layout/ViewModePopup";
@@ -29,6 +31,7 @@ export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>("Web");
   const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [isModeSelected, setIsModeSelected] = useState(false);
+  const [isSpreadTheWordOpen, setIsSpreadTheWordOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [editingModel, setEditingModel] = useState<ModelProfile | null>(null);
   const [selectedModelForDetail, setSelectedModelForDetail] = useState<ModelProfile | null>(null);
@@ -381,6 +384,7 @@ export default function App() {
           onDiscover={handleDiscover}
           onTopStars={handleTopStars}
           onFavorites={handleFavorites}
+          onSpreadTheWord={() => setIsSpreadTheWordOpen(true)}
           activeFilter={activeFilter}
           totalClicks={totalClicks}
           viewMode={viewMode}
@@ -429,6 +433,8 @@ export default function App() {
           onCardClick={(m) => setSelectedModelForDetail(m)} 
           viewMode={viewMode}
         />
+
+        <PromotionBanner />
 
         {/* Filters and Search Area */}
         <div className="flex flex-col gap-8 mb-16 px-2">
@@ -783,6 +789,10 @@ export default function App() {
         />
 
         <BackToTop />
+        <SpreadTheWordModal 
+          isOpen={isSpreadTheWordOpen} 
+          onClose={() => setIsSpreadTheWordOpen(false)} 
+        />
         </div>
       </main>
 
