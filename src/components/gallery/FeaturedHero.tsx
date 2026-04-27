@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ModelProfile } from '@/src/types';
-import { isVideoUrl } from '@/src/lib/imageUtils';
+import { isVideoUrl, sanitizeImageUrl } from '@/src/lib/imageUtils';
 import { Star, ArrowRight, Play } from 'lucide-react';
 
 interface FeaturedHeroProps {
@@ -10,6 +10,8 @@ interface FeaturedHeroProps {
 }
 
 export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
+  const thumbnail = sanitizeImageUrl(model.thumbnail);
+  
   const handleUnlock = (e: React.MouseEvent) => {
     if (onRedirect && model.socials?.instagram) {
       onRedirect(model, model.socials.instagram);
@@ -27,9 +29,9 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
     >
       {/* Background Image with Cinematic Effects */}
       <div className="absolute inset-0">
-        {isVideoUrl(model.thumbnail) ? (
+        {isVideoUrl(thumbnail) ? (
           <video
-            src={model.thumbnail}
+            src={thumbnail}
             autoPlay
             loop
             muted
@@ -38,7 +40,7 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
           />
         ) : (
           <img 
-            src={model.thumbnail} 
+            src={thumbnail} 
             alt={model.name}
             className="w-full h-full object-cover transition-transform duration-[4s] ease-out group-hover:scale-110"
             referrerPolicy="no-referrer"

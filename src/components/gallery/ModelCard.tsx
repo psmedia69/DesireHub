@@ -5,7 +5,7 @@ import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, Chevro
 import { cn } from "@/src/lib/utils";
 import { supabase } from "@/src/lib/supabase";
 import { toast } from "sonner";
-import { isVideoUrl } from "@/src/lib/imageUtils";
+import { isVideoUrl, sanitizeImageUrl } from "@/src/lib/imageUtils";
 import ImageLightbox from "./ImageLightbox";
 
 interface ModelCardProps {
@@ -49,7 +49,8 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
     }
   };
 
-  const images = [model.thumbnail, ...(model.gallery || [])].filter(Boolean);
+  const thumbnail = sanitizeImageUrl(model.thumbnail);
+  const images = [thumbnail, ...(model.gallery || []).map(url => sanitizeImageUrl(url))].filter(Boolean);
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -186,9 +187,9 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         className="aspect-[4/5] md:aspect-square overflow-hidden relative cursor-pointer"
         onClick={handleExpand}
       >
-        {isVideoUrl(model.thumbnail) ? (
+        {isVideoUrl(thumbnail) ? (
           <video
-            src={model.thumbnail}
+            src={thumbnail}
             autoPlay
             loop
             muted
@@ -197,7 +198,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
           />
         ) : (
           <img
-            src={model.thumbnail}
+            src={thumbnail}
             alt={model.name}
             loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"

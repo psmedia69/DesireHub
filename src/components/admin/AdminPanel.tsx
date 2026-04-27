@@ -261,10 +261,10 @@ export default function AdminPanel({ onModelAdded, models = [] }: AdminPanelProp
                         <div className="flex items-center gap-4">
                           <div className="text-xl font-black text-gold/30 group-hover:text-gold transition-colors">{idx + 1}</div>
                           <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10">
-                            {isVideoUrl(model.thumbnail) ? (
-                              <video src={model.thumbnail} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+                            {isVideoUrl(sanitizeImageUrl(model.thumbnail)) ? (
+                              <video src={sanitizeImageUrl(model.thumbnail)} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                             ) : (
-                              <img src={model.thumbnail} alt={model.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                              <img src={sanitizeImageUrl(model.thumbnail)} alt={model.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                             )}
                           </div>
                           <div>
@@ -385,10 +385,10 @@ export default function AdminPanel({ onModelAdded, models = [] }: AdminPanelProp
                       animate={{ scale: 1, opacity: 1 }}
                       className="aspect-[4/5] relative rounded-3xl overflow-hidden bg-white/5 border border-white/10 w-32 shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
                     >
-                      {isVideoUrl(formData.imageUrl) ? (
-                        <video src={formData.imageUrl} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+                      {isVideoUrl(sanitizeImageUrl(formData.imageUrl)) ? (
+                        <video src={sanitizeImageUrl(formData.imageUrl)} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                       ) : (
-                        <img src={formData.imageUrl} alt="System Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        <img src={sanitizeImageUrl(formData.imageUrl)} alt="System Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       )}
                     </motion.div>
                   </div>

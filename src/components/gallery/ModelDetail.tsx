@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Eye, TrendingUp, Sparkles, Share2, Heart, ExternalLink, MapPin, Grid, Camera } from 'lucide-react';
 import { ModelProfile } from '../../types';
 import { cn } from '../../lib/utils';
-import { isVideoUrl } from '../../lib/imageUtils';
+import { isVideoUrl, sanitizeImageUrl } from '../../lib/imageUtils';
 import ModelCard from './ModelCard';
 import ImageLightbox from './ImageLightbox';
 
@@ -42,10 +42,14 @@ export default function ModelDetail({
 
   const galleryImages = useMemo(() => {
     if (!model) return [];
-    return [model.thumbnail, ...(model.gallery || [])].filter(Boolean) as string[];
+    return [model.thumbnail, ...(model.gallery || [])]
+      .filter(Boolean)
+      .map(url => sanitizeImageUrl(url as string));
   }, [model]);
 
   if (!model) return null;
+
+  const thumbnail = sanitizeImageUrl(model.thumbnail);
 
   return (
     <AnimatePresence>
@@ -86,9 +90,9 @@ export default function ModelDetail({
                   className="relative w-full aspect-square overflow-hidden cursor-zoom-in group"
                   onClick={() => setLightboxIndex(0)}
                 >
-                  {isVideoUrl(model.thumbnail) ? (
+                  {isVideoUrl(thumbnail) ? (
                     <video
-                      src={model.thumbnail}
+                      src={thumbnail}
                       autoPlay
                       loop
                       muted
@@ -97,7 +101,7 @@ export default function ModelDetail({
                     />
                   ) : (
                     <img
-                      src={model.thumbnail}
+                      src={thumbnail}
                       alt={model.name}
                       className="w-full h-full object-cover transition-transform duration-700"
                       referrerPolicy="no-referrer"

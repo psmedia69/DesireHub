@@ -240,9 +240,9 @@ export default function EditModelModal({ model, isOpen, onClose, onSuccess }: Ed
                     {previewUrl && (
                       <div className="flex justify-center mt-4">
                         <div className="aspect-[4/5] relative rounded-xl overflow-hidden bg-white/5 border border-white/10 w-32 shadow-lg">
-                          {isVideoUrl(previewUrl) ? (
+                          {isVideoUrl(sanitizeImageUrl(previewUrl)) ? (
                             <video 
-                              src={previewUrl} 
+                              src={sanitizeImageUrl(previewUrl)} 
                               autoPlay 
                               loop 
                               muted 
@@ -251,7 +251,7 @@ export default function EditModelModal({ model, isOpen, onClose, onSuccess }: Ed
                             />
                           ) : (
                             <img 
-                              src={previewUrl} 
+                              src={sanitizeImageUrl(previewUrl)} 
                               alt="Preview" 
                               className="w-full h-full object-cover" 
                               referrerPolicy="no-referrer"
