@@ -258,7 +258,6 @@ export default function App() {
   }, [hasMore, isLoading, isFetchingMore]);
 
   const filteredModels = useMemo(() => {
-    // Basic sorting for anything not fully handled by Supabase (like random)
     if (sortOption === "random") {
       return [...supabaseModels].sort((a, b) => {
         const valA = Math.sin(Number(a.id.replace(/\D/g, '')) || 0 + randomSeed) * 10000;
@@ -267,8 +266,34 @@ export default function App() {
       });
     }
 
-    // Supabase already returns sorted data, but we might want to ensure featured models 
-    // are ALWAYS at the top regardless of the other sort options (if that's the desired UX)
+    // Default or Popular sorting uses alternating New and Hot logic
+    if (sortOption === "newest" || sortOption === "popular") {
+      const now = new Date().getTime();
+      const NEW_WINDOW = 64800000; // 18 hours
+
+      // Pool A: New models (within 18 hours), sorted by newest first
+      const poolA = [...supabaseModels].filter(m => 
+        m.createdAt && (now - new Date(m.createdAt).getTime() < NEW_WINDOW)
+      ).sort((a, b) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime());
+
+      // Pool B: Hot models (older than 18 hours), sorted by heatScore
+      const poolB = [...supabaseModels].filter(m => 
+        !m.createdAt || (now - new Date(m.createdAt).getTime() >= NEW_WINDOW)
+      ).sort((a, b) => (b.heatScore || 0) - (a.heatScore || 0));
+
+      const mixed: ModelProfile[] = [];
+      const maxLength = Math.max(poolA.length, poolB.length);
+
+      for (let i = 0; i < maxLength; i++) {
+        // High priority: Alternate New and Hot
+        if (i < poolA.length) mixed.push(poolA[i]);
+        if (i < poolB.length) mixed.push(poolB[i]);
+      }
+
+      return mixed;
+    }
+
+    // Fallback for other sort options (respect featured models at top)
     return [...supabaseModels].sort((a, b) => {
       if (a.featured && !b.featured) return -1;
       if (!a.featured && b.featured) return 1;

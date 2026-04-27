@@ -241,7 +241,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         {/* Status indicator */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
           <div className="flex flex-col gap-2">
-            {model.createdAt && (new Date().getTime() - new Date(model.createdAt).getTime() < 172800000) && (
+            {model.createdAt && (new Date().getTime() - new Date(model.createdAt).getTime() < 64800000) && (
               <div className="px-3 py-1 bg-black/80 text-white text-[9px] font-bold uppercase tracking-wider rounded-full border border-white/10 flex items-center gap-2 w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                 New
