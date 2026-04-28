@@ -1,7 +1,7 @@
 import React, { useState, memo } from "react";
 import { ModelProfile } from "@/src/types";
 import { motion, AnimatePresence } from "motion/react";
-import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye } from "lucide-react";
+import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye, Compass, ShieldCheck } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { supabase } from "@/src/lib/supabase";
 import { toast } from "sonner";
@@ -144,13 +144,17 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         transform: "translateZ(0)",
         willChange: "transform"
       }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      whileHover={{ 
-        y: -5,
-        transition: { duration: 0.2, ease: "easeOut" }
-      }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ 
+          duration: 0.6,
+          ease: [0.22, 1, 0.36, 1] // Custom luxury ease
+        }}
+        whileHover={{ 
+          y: -8,
+          scale: 1.01,
+          transition: { duration: 0.4, ease: "easeOut" }
+        }}
       whileTap={{ scale: 0.98 }}
       className={cn(
         "group relative glass-premium rounded-[32px] overflow-hidden transition-all duration-300 h-fit premium-border",
@@ -198,13 +202,21 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         onClick={handleExpand}
       >
         {isVideoUrl(thumbnail) ? (
-          <video
+          <motion.video
             src={thumbnail}
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1.0 }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              repeatType: "reverse",
+              ease: "easeInOut" 
+            }}
+            className="w-full h-full object-cover"
           />
         ) : (
           <img
@@ -387,26 +399,36 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
           
           <motion.button 
             onClick={handleLinkClick}
-            whileHover={{ y: -2 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            whileHover={{ y: -3, scale: 1.01 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             whileTap={{ scale: 0.98 }}
             style={{
               background: model.featured 
-                ? "linear-gradient(135deg, #2563eb, #06b6d4)" 
-                : "linear-gradient(135deg, #FFD700, #C9A23F)",
-              color: model.featured ? "white" : "black",
+                ? "linear-gradient(135deg, #1e40af, #3b82f6)" 
+                : "linear-gradient(135deg, #bf953f, #aa771c)",
+              color: "white",
               boxShadow: model.featured 
-                ? "0 8px 25px rgba(37, 99, 235, 0.4)" 
-                : "0 8px 25px rgba(255, 215, 0, 0.4)"
+                ? "0 10px 30px -5px rgba(30, 64, 175, 0.4)" 
+                : "0 10px 30px -5px rgba(191, 149, 63, 0.3)"
             }}
-            className="w-full py-4 rounded-2xl text-[10px] sm:text-[11px] md:text-[10px] lg:text-[12px] font-[900] uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.1em] lg:tracking-[0.2em] flex items-center justify-center cursor-pointer whitespace-nowrap group/unlock"
+            className="w-full py-4 rounded-2xl text-[10px] sm:text-[11px] md:text-[10px] lg:text-[11px] font-black uppercase tracking-[0.25em] flex items-center justify-center cursor-pointer whitespace-nowrap group/unlock relative overflow-hidden"
             title={`View ${model.name}'s Profile on Socials`}
           >
-            <span className="group-hover/unlock:hidden">
-              {model.featured ? "Admin's Pick" : "Unlock Now"}
-            </span>
-            <span className="hidden group-hover/unlock:inline">
-              Get Full Access
+            {/* Shimmer effect */}
+            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/unlock:animate-[shimmer_2s_infinite] transition-transform" />
+            
+            <span className="relative z-10 flex items-center gap-2">
+              {model.featured ? (
+                <>
+                  <Compass className="w-3.5 h-3.5 animate-pulse" />
+                  <span>ELITE SELECTION</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>UNLOCK ACCESS</span>
+                </>
+              )}
             </span>
           </motion.button>
         </div>

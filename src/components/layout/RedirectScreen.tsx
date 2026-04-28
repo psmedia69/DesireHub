@@ -170,12 +170,18 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                   <div className="flex flex-col items-center gap-3 relative z-10">
                     <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/20">
                       {isVideoUrl(sanitizeImageUrl(model.thumbnail)) ? (
-                        <video 
+                        <motion.video 
                           src={sanitizeImageUrl(model.thumbnail)} 
                           autoPlay 
                           loop 
                           muted 
                           playsInline 
+                          initial={{ scale: 1.15 }}
+                          animate={{ scale: 1.0 }}
+                          transition={{ 
+                            duration: Math.max(duration / 1000, 2), 
+                            ease: "easeInOut"
+                          }}
                           className="w-full h-full object-cover" 
                         />
                       ) : (

@@ -4,6 +4,7 @@ import CategoryFilters from "./components/filters/CategoryFilters";
 import SortingFilters from "./components/filters/SortingFilters";
 import ViewSwitcher, { ViewMode } from "./components/layout/ViewSwitcher";
 import ModelCard from "./components/gallery/ModelCard";
+import ModelSkeleton from "./components/gallery/ModelSkeleton";
 import AdminPanel from "./components/admin/AdminPanel";
 import EditModelModal from "./components/admin/EditModelModal";
 import TrendingSection from "./components/gallery/TrendingSection";
@@ -14,6 +15,7 @@ import DynamicAtmosphere from "./components/layout/DynamicAtmosphere";
 import AgeVerification from "./components/layout/AgeVerification";
 import { ViewModePopup } from "./components/layout/ViewModePopup";
 import RedirectScreen from "./components/layout/RedirectScreen";
+import MagneticCursor from "./components/layout/MagneticCursor";
 import BackToTop from "./components/ui/BackToTop";
 import { ModelProfile, ModelCategory, SortOption } from "./types";
 import { motion, AnimatePresence } from "motion/react";
@@ -382,7 +384,10 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen selection:bg-gold/30">
+    <div className="relative min-h-screen selection:bg-gold/30 overflow-x-hidden">
+      <div className="premium-grain" />
+      <div className="premium-scanline" />
+      <MagneticCursor />
       <AgeVerification onVerify={() => setIsAgeVerified(true)} />
       
       {isAgeVerified && !isModeSelected && (
@@ -620,16 +625,18 @@ export default function App() {
             "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
           )}
         >
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="popLayout" initial={false}>
             {isLoading ? (
-              Array.from({ length: 8 }).map((_, i) => (
+              Array.from({ length: viewMode === "Phone" ? 4 : PAGE_SIZE }).map((_, i) => (
                 <motion.div
                   key={`skeleton-${i}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="aspect-[4/5] glass-premium rounded-3xl animate-pulse border border-white/10"
-                />
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <ModelSkeleton />
+                </motion.div>
               ))
             ) : filteredModels.length === 0 ? (
               <motion.div 

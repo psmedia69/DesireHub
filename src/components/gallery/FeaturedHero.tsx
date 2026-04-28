@@ -59,12 +59,12 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
           transition={{ duration: 1, delay: 0.5 }}
           className="flex flex-wrap items-center gap-4 mb-8"
         >
-          <div className="px-5 py-2 bg-blue-600 rounded-full flex items-center gap-2 text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(37,99,235,0.4)]">
+          <div className="px-5 py-2 bg-linear-to-r from-blue-700 via-blue-600 to-indigo-800 rounded-full flex items-center gap-2 text-white font-black text-[10px] uppercase tracking-[0.25em] shadow-[0_0_40px_rgba(30,64,175,0.4)] border border-white/10">
             <Star className="w-3 h-3 fill-white" />
-            Admin's Pick
+            Elite Selection
           </div>
-          <div className="px-4 py-2 bg-black/40 border border-white/20 rounded-full text-white/70 text-[9px] font-bold uppercase tracking-widest">
-            Elite Member Status
+          <div className="px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-white/70 text-[9px] font-black uppercase tracking-[0.2em]">
+            Verified Direct
           </div>
         </motion.div>
 
@@ -72,7 +72,7 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-6xl sm:text-7xl md:text-9xl font-cinzel font-bold text-white mb-8 tracking-tighter leading-[0.9]"
+          className="text-6xl sm:text-7xl md:text-9xl font-cinzel font-bold text-white mb-8 tracking-tighter leading-[0.85] text-gold-gradient"
         >
           {model.name}
         </motion.h1>
@@ -81,9 +81,9 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 1 }}
-          className="text-white/60 text-lg md:text-xl mb-12 max-w-2xl leading-relaxed italic font-serif"
+          className="text-white/70 text-lg md:text-2xl mb-12 max-w-2xl leading-relaxed font-serif tracking-wide italic"
         >
-          Step into the exclusive world of {model.name}. Now trending at the pinnacle of the Elite directory with unrivaled engagement.
+          Discover reaching the zenith of the global directory. An exclusive look into the most trending talent in the digital space.
         </motion.p>
 
         <motion.div
@@ -94,13 +94,13 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
         >
           <button 
             onClick={handleUnlock}
-            className="group/btn relative px-10 py-5 overflow-hidden rounded-full shadow-2xl transition-all"
+            className="group/btn relative px-12 py-5 overflow-hidden rounded-2xl transition-all duration-700 shadow-2xl"
           >
-            <div className="absolute inset-0 bg-white group-hover/btn:bg-blue-500 transition-colors duration-500" />
-            <span className="relative flex items-center gap-3 text-black group-hover/btn:text-white font-black text-xs uppercase tracking-[0.2em] whitespace-nowrap transition-colors">
-              <span className="group-hover/btn:hidden">Admin's Pick</span>
-              <span className="hidden group-hover/btn:block">Get Exclusive Access</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+            <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-900 group-hover/btn:scale-110 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_2.5s_infinite]" />
+            <span className="relative flex items-center gap-3 text-white font-black text-xs uppercase tracking-[0.3em] whitespace-nowrap">
+              Experience Now
+              <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-2" />
             </span>
           </button>
           

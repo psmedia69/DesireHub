@@ -77,20 +77,24 @@ export default function Navbar({ onSearch, onDiscover, onTopStars, onFavorites, 
           <div className="flex items-center gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden">
             {/* Logo */}
             <div className={cn(
-              "flex flex-col items-center leading-none shrink-0 cursor-pointer py-1 transition-all duration-500",
+              "flex flex-col items-center leading-none shrink-0 cursor-pointer py-1 transition-all duration-500 relative",
               viewMode === "Phone" ? "w-[80px] pl-1" : isScrolled ? "w-[100px] scale-90" : "w-[120px]"
             )}>
+              {/* Live Status Orb */}
+              <div className="absolute -top-1 -right-2 flex items-center gap-1.5 px-1.5 py-0.5 rounded-full bg-gold/10 border border-gold/20 backdrop-blur-md">
+                <div className="w-1 h-1 rounded-full bg-gold animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
+                <span className="text-[6px] font-black uppercase tracking-widest text-gold">Live</span>
+              </div>
+
               <span className={cn("logo-monogram", viewMode === "Phone" ? "text-xl" : "text-3xl")}>DH</span>
               <div className={cn("flex items-baseline", viewMode === "Phone" ? "mt-0" : "mt-[-0.5rem]")}>
                 <span className={cn("logo-desire", viewMode === "Phone" ? "text-xl" : "text-3xl")}>Desire</span>
                 <span className={cn("logo-hub", viewMode === "Phone" ? "text-xs ml-1" : "text-lg ml-2")}>HUB</span>
               </div>
               <div className="flex items-center gap-1 mt-1 w-full shrink-0">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
-                <span className={cn("font-black uppercase tracking-[0.4em] text-gold whitespace-nowrap opacity-90", viewMode === "Phone" ? "text-[4.5px]" : "text-[6px]")}>
-                  Exclusive Directory
+                <span className={cn("font-black uppercase tracking-[0.5em] text-gold/60 whitespace-nowrap text-center w-full", viewMode === "Phone" ? "text-[4.5px]" : "text-[6px]")}>
+                  EXCLUSIVITY FIRST
                 </span>
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
               </div>
             </div>
   
