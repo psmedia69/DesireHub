@@ -257,26 +257,17 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         </AnimatePresence>
 
         {/* Status indicator */}
-        <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
-          <div className="flex flex-col gap-2">
-            {model.createdAt && (new Date().getTime() - new Date(model.createdAt).getTime() < 86400000) && (
-              <div className="px-3 py-1 bg-black/80 text-white text-[9px] font-bold uppercase tracking-wider rounded-full border border-white/10 flex items-center gap-2 w-fit">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                New
-              </div>
-            )}
-          </div>
-          
-          <div className="flex items-center gap-2 pointer-events-auto">
+        <div className="absolute top-4 left-4 right-4 flex items-start justify-between pointer-events-none z-40">
+          <div className="flex flex-col gap-2 pointer-events-auto">
             {isAdmin && (
-              <div className="flex gap-1">
+              <div className="flex gap-2">
                 {onEdit && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onEdit(model);
                     }}
-                    className="p-2.5 bg-black/80 hover:bg-gold border border-white/20 hover:border-black/20 rounded-full transition-all text-gold hover:text-black shadow-xl"
+                    className="p-2.5 bg-black/90 hover:bg-gold border border-white/30 hover:border-black/20 rounded-xl transition-all text-gold hover:text-black shadow-2xl backdrop-blur-md"
                     title="Edit Profile"
                   >
                     <Edit3 className="w-4 h-4" />
@@ -287,13 +278,22 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
                     e.stopPropagation();
                     setShowDeleteConfirm(true);
                   }}
-                  className="p-2.5 bg-black/80 hover:bg-red-500 border border-white/20 hover:border-black/20 rounded-full transition-all text-red-500 hover:text-white shadow-xl"
+                  className="p-2.5 bg-black/90 hover:bg-red-500 border border-white/30 hover:border-black/20 rounded-xl transition-all text-red-500 hover:text-white shadow-2xl backdrop-blur-md"
                   title="Delete Profile"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             )}
+            {model.createdAt && (new Date().getTime() - new Date(model.createdAt).getTime() < 86400000) && (
+              <div className="px-3 py-1 bg-black/80 text-white text-[9px] font-bold uppercase tracking-wider rounded-full border border-white/10 flex items-center gap-2 w-fit">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                New
+              </div>
+            )}
+          </div>
+          
+          <div className="flex flex-col items-end gap-2 pointer-events-auto">
             {model.featured && (
               <div className="flex items-center gap-1.5 px-3 py-1 bg-black/60 rounded-full border border-white/10">
                 <span className="h-1.5 w-1.5 rounded-full bg-green-500" /> 
