@@ -365,7 +365,7 @@ export default function App() {
   const handleRedirect = useMemo(() => (model: ModelProfile, url: string) => {
     setRedirectingModel(model);
     setRedirectUrl(url);
-    setRedirectDuration(1000);
+    setRedirectDuration(2000);
   }, []);
 
   const handleRedirectComplete = useMemo(() => () => {
