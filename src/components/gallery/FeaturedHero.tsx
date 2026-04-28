@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ModelProfile } from '@/src/types';
 import { isVideoUrl, sanitizeImageUrl } from '@/src/lib/imageUtils';
@@ -13,13 +13,32 @@ interface FeaturedHeroProps {
 export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
   const thumbnail = sanitizeImageUrl(model.thumbnail);
   const [showTeaser, setShowTeaser] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Smart Visibility Tracking
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
+    if (!isVisible) return;
     const timer = setTimeout(() => {
       setShowTeaser(true);
-    }, 4000); // Slightly longer for the hero
+    }, 4000); 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isVisible]);
   
   const handleUnlock = (e: React.MouseEvent) => {
     if (onRedirect && model.socials?.instagram) {
@@ -31,47 +50,50 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
 
   return (
     <motion.div 
+      ref={containerRef}
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={{ opacity: isVisible ? 1 : 0.8, y: 0 }}
       transition={{ duration: 1 }}
-      className="relative w-full min-h-[500px] md:h-[600px] mb-20 rounded-[40px] overflow-hidden group shadow-[0_30px_100px_-20px_rgba(0,0,0,0.8)] border border-white/5"
+      className="relative w-full min-h-[500px] md:h-[600px] mb-20 rounded-[40px] overflow-hidden group shadow-[0_30px_100px_-20px_rgba(0,0,0,0.8)] border border-white/5 will-change-transform"
     >
       {/* Background Image with Cinematic Effects */}
-      <div className="absolute inset-0">
-        {isVideoUrl(thumbnail) ? (
-          <motion.video
-            src={thumbnail}
-            autoPlay
-            loop
-            muted
-            playsInline
-            initial={{ scale: 1.15 }}
-            animate={{ 
-              scale: showTeaser ? 1.05 : 1.0,
-              filter: showTeaser ? "blur(12px)" : "blur(0px)"
-            }}
-            transition={{ 
-              scale: { duration: 4, ease: "linear" },
-              filter: { duration: 1.5, ease: "easeInOut" }
-            }}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <motion.img 
-            src={thumbnail} 
-            alt={model.name}
-            initial={{ scale: 1.15 }}
-            animate={{ 
-              scale: showTeaser ? 1.05 : 1.0,
-              filter: showTeaser ? "blur(12px)" : "blur(0px)"
-            }}
-            transition={{ 
-              scale: { duration: 4, ease: "linear" },
-              filter: { duration: 1.5, ease: "easeInOut" }
-            }}
-            className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-          />
+      <div className="absolute inset-0 grayscale-[20%] brightness-[0.8] contrast-[1.1]">
+        {isVisible && (
+          isVideoUrl(thumbnail) ? (
+            <motion.video
+              src={thumbnail}
+              autoPlay
+              loop
+              muted
+              playsInline
+              initial={{ scale: 1.15 }}
+              animate={{ 
+                scale: showTeaser ? 1.05 : 1.0,
+                filter: showTeaser ? "blur(12px)" : "blur(0px)"
+              }}
+              transition={{ 
+                scale: { duration: 4, ease: "linear" },
+                filter: { duration: 1.5, ease: "easeInOut" }
+              }}
+              className="w-full h-full object-cover will-change-[transform,filter]"
+            />
+          ) : (
+            <motion.img 
+              src={thumbnail} 
+              alt={model.name}
+              initial={{ scale: 1.15 }}
+              animate={{ 
+                scale: showTeaser ? 1.05 : 1.0,
+                filter: showTeaser ? "blur(12px)" : "blur(0px)"
+              }}
+              transition={{ 
+                scale: { duration: 4, ease: "linear" },
+                filter: { duration: 1.5, ease: "easeInOut" }
+              }}
+              className="w-full h-full object-cover will-change-[transform,filter]"
+              referrerPolicy="no-referrer"
+            />
+          )
         )}
         {/* Gradient Overlays */}
         <div className="absolute inset-0 bg-linear-to-r from-black via-black/60 to-transparent" />

@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect, useMemo } from "react";
+import React, { useState, memo, useEffect, useMemo, useRef } from "react";
 import { ModelProfile } from "@/src/types";
 import { motion, AnimatePresence } from "motion/react";
 import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye, Compass, ShieldCheck, Lock, Video } from "lucide-react";
@@ -27,6 +27,24 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   const [localClicks, setLocalClicks] = useState(model.clicks || 0);
   const [localViews, setLocalViews] = useState(model.views || 0);
   const [showTeaser, setShowTeaser] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Visibility Tracking to optimize mobile performance
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05, rootMargin: '50px' } 
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   // Derived Status
   const isElite = localClicks >= 100;
@@ -63,20 +81,23 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
 
   const thumbnail = sanitizeImageUrl(model.thumbnail);
   const images = useMemo(() => [thumbnail, ...(model.gallery || []).map(url => sanitizeImageUrl(url))].filter(Boolean), [thumbnail, model.gallery]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [totalSteps, setTotalSteps] = useState(0);
+  const SECONDS_PER_STEP = 4;
 
-  // Automatic slideshow logic
+  // Progressive Teaser Sequence Logic
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (images.length <= 1 || !isVisible) return;
     
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
-    }, 4000); // Changed to 4 seconds to give users time to see each item
+      setTotalSteps(prev => prev + 1);
+    }, SECONDS_PER_STEP * 1000);
     
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [images.length, isVisible]);
 
-  const currentMedia = images[currentImageIndex] || thumbnail;
+  const currentMediaIndex = totalSteps % images.length;
+  const currentMediaRound = Math.floor(totalSteps / images.length);
+  const currentMedia = images[currentMediaIndex] || thumbnail;
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -164,11 +185,12 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
 
   return (
     <motion.div 
+      ref={containerRef}
       id={`model-card-${model.id}`}
       style={{
         transformStyle: "preserve-3d",
         transform: "translateZ(0)",
-        willChange: "transform"
+        willChange: "transform, opacity"
       }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
@@ -228,19 +250,19 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
       >
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${model.id}-${currentImageIndex}`}
-            initial={{ opacity: 0, filter: "blur(15px)", scale: 1.1 }}
+            key={`${model.id}-${currentMediaIndex}-${currentMediaRound}`}
+            initial={{ opacity: 0, filter: "blur(10px)", scale: 1.05 }}
             animate={{ 
-              opacity: 1, 
-              filter: showTeaser ? "blur(12px)" : "blur(0px)",
-              scale: showTeaser ? 1.05 : 1.0
+              opacity: isVisible ? 1 : 0, 
+              filter: showTeaser ? "blur(10px)" : "blur(0px)",
+              scale: showTeaser ? 1.02 : 1.0
             }}
-            exit={{ opacity: 0, filter: "blur(15px)", scale: 1.1 }}
+            exit={{ opacity: 0, filter: "blur(10px)", scale: 0.98 }}
             transition={{ 
-              duration: 0.8,
+              duration: 1.0,
               ease: "easeInOut"
             }}
-            className="w-full h-full absolute inset-0"
+            className="w-full h-full absolute inset-0 will-change-[opacity,filter,transform]"
           >
             {isVideoUrl(currentMedia) ? (
               <video
@@ -249,6 +271,12 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
                 loop
                 muted
                 playsInline
+                onLoadedMetadata={(e) => {
+                  if (!isVisible) return;
+                  const video = e.currentTarget;
+                  const startTime = (currentMediaRound * SECONDS_PER_STEP) % (video.duration || 1);
+                  video.currentTime = startTime;
+                }}
                 className="w-full h-full object-cover"
               />
             ) : (
