@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShieldCheck, ChevronRight, Lock, Globe, Loader2 } from 'lucide-react';
 import { ModelProfile } from '../../types';
+import { cn } from '../../lib/utils';
 
 interface RedirectScreenProps {
   model: ModelProfile | null;
@@ -14,6 +15,12 @@ interface RedirectScreenProps {
 export default function RedirectScreen({ model, isOpen, onComplete, onCancel, duration = 3000 }: RedirectScreenProps) {
   const [progress, setProgress] = useState(0);
   const [count, setCount] = useState(Math.ceil(duration / 1000));
+  const onCompleteRef = React.useRef(onComplete);
+
+  // Keep onCompleteRef in sync
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -50,15 +57,15 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
     }, 1000);
 
     const completionTimer = setTimeout(() => {
-      onComplete();
-    }, duration + 500);
+      onCompleteRef.current();
+    }, duration);
 
     return () => {
       clearInterval(progressTimer);
       clearInterval(countTimer);
       clearTimeout(completionTimer);
     };
-  }, [isOpen, onComplete, duration]);
+  }, [isOpen, duration]);
 
   if (!model) return null;
 
@@ -202,11 +209,7 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                   </div>
 
                   <button 
-                    onClick={() => {
-                      if (model.socials?.instagram) {
-                        window.open(model.socials.instagram, '_blank');
-                      }
-                    }}
+                    onClick={onComplete}
                     className={cn(
                       "w-full py-4 font-black uppercase tracking-[0.2em] rounded-2xl transition-all flex items-center justify-center gap-3 group",
                       model.featured 

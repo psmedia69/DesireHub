@@ -208,7 +208,11 @@ export default function App() {
         if (reset) {
           setSupabaseModels(mappedData);
         } else {
-          setSupabaseModels(prev => [...prev, ...mappedData]);
+          setSupabaseModels(prev => {
+            const existingIds = new Set(prev.map(m => m.id));
+            const uniqueNew = mappedData.filter(m => !existingIds.has(m.id));
+            return [...prev, ...uniqueNew];
+          });
         }
 
         if (count !== null && (from + mappedData.length >= count)) {
@@ -357,6 +361,25 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, 800);
   };
+
+  const handleRedirect = useMemo(() => (model: ModelProfile, url: string) => {
+    setRedirectingModel(model);
+    setRedirectUrl(url);
+    setRedirectDuration(1000);
+  }, []);
+
+  const handleRedirectComplete = useMemo(() => () => {
+    if (redirectUrl) {
+      window.open(redirectUrl, '_blank');
+      setRedirectingModel(null);
+      setRedirectUrl(null);
+    }
+  }, [redirectUrl]);
+
+  const handleRedirectCancel = useMemo(() => () => {
+    setRedirectingModel(null);
+    setRedirectUrl(null);
+  }, []);
 
   return (
     <div className="relative min-h-screen selection:bg-gold/30">
@@ -589,9 +612,9 @@ export default function App() {
         </div>
 
         <motion.div 
-          layout
+          layout={viewMode !== "Phone"}
           className={cn(
-            "grid gap-8 transition-all duration-500",
+            "grid gap-8 transition-all duration-300",
             viewMode === "Phone" ? "grid-cols-1" : 
             viewMode === "Tab" ? "grid-cols-3" : 
             "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
@@ -650,11 +673,7 @@ export default function App() {
                       window.scrollTo({ top: 0, behavior: "smooth" });
                       toast.success(`Filtering by ${country}`, { icon: '🌍' });
                     }}
-                    onRedirect={(model, url) => {
-                      setRedirectingModel(model);
-                      setRedirectUrl(url);
-                      setRedirectDuration(1000);
-                    }}
+                    onRedirect={handleRedirect}
                   />
                 </motion.div>
               ))
@@ -722,11 +741,7 @@ export default function App() {
                         window.scrollTo({ top: 0, behavior: "smooth" });
                         toast.success(`Filtering by ${country}`, { icon: '🌍' });
                       }}
-                      onRedirect={(model, url) => {
-                        setRedirectingModel(model);
-                        setRedirectUrl(url);
-                        setRedirectDuration(1000);
-                      }}
+                      onRedirect={handleRedirect}
                     />
                   </motion.div>
                 ));
@@ -751,11 +766,7 @@ export default function App() {
           onClose={() => setSelectedModelForDetail(null)}
           onSelectModel={setSelectedModelForDetail}
           onInteraction={handleModelUpdate}
-          onRedirect={(model, url) => {
-            setRedirectingModel(model);
-            setRedirectUrl(url);
-            setRedirectDuration(1000);
-          }}
+          onRedirect={handleRedirect}
           isFavorite={selectedModelForDetail ? favorites.includes(selectedModelForDetail.id) : false}
           favorites={favorites}
           onToggleFavorite={toggleFavorite}
@@ -765,17 +776,8 @@ export default function App() {
           model={redirectingModel}
           isOpen={!!redirectingModel}
           duration={redirectDuration}
-          onComplete={() => {
-            if (redirectUrl) {
-              window.open(redirectUrl, '_blank');
-              setRedirectingModel(null);
-              setRedirectUrl(null);
-            }
-          }}
-          onCancel={() => {
-            setRedirectingModel(null);
-            setRedirectUrl(null);
-          }}
+          onComplete={handleRedirectComplete}
+          onCancel={handleRedirectCancel}
         />
 
         <BackToTop />

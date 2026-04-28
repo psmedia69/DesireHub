@@ -141,10 +141,15 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
       id={`model-card-${model.id}`}
       style={{
         transformStyle: "preserve-3d",
+        transform: "translateZ(0)",
+        willChange: "transform"
       }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
       whileHover={{ 
         y: -5,
-        transition: { duration: 0.2 }
+        transition: { duration: 0.2, ease: "easeOut" }
       }}
       whileTap={{ scale: 0.98 }}
       className={cn(
@@ -218,10 +223,10 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         <AnimatePresence>
           {showDeleteConfirm && (
             <motion.div 
-              initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-              animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
-              exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-              className="absolute inset-0 z-50 bg-black/60 flex flex-col items-center justify-center p-6 text-center premium-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-50 bg-black/80 flex flex-col items-center justify-center p-6 text-center premium-overlay"
             >
               <div className="bg-red-500/20 p-4 rounded-full mb-4 border border-red-500/40">
                 <AlertTriangle className="w-8 h-8 text-red-500" />
@@ -309,7 +314,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <motion.div 
-              key={localViews}
+              key={`views-${localViews}`}
               initial={{ scale: 0.9, opacity: 0.8 }}
               animate={{ scale: 1, opacity: 1 }}
               className="flex items-center gap-1.5 px-2 py-0.5 bg-gold/10 rounded-md border border-gold/20"
@@ -322,7 +327,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
             </motion.div>
 
             <motion.div 
-              key={localClicks}
+              key={`clicks-${localClicks}`}
               initial={{ scale: 0.9, opacity: 0.8 }}
               animate={{ scale: 1, opacity: 1 }}
               className="flex items-center gap-1.5 px-2 py-0.5 bg-white/5 rounded-md border border-white/10"

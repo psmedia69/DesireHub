@@ -42,28 +42,44 @@
 @layer components {
   .glass-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(8px); /* Reduced for performance */
     border: 1px solid var(--glass-border);
   }
 
+  @media (max-width: 640px) {
+    .glass-panel {
+      backdrop-filter: none; /* Disable expensive blur on mobile */
+      background: rgba(0, 0, 0, 0.8);
+    }
+  }
+
   .glass-premium {
-    background: rgba(25, 25, 25, 0.6);
+    background: rgba(25, 25, 25, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 
-      0 10px 40px -10px rgba(0, 0, 0, 0.5),
-      inset 0 1px 1px rgba(255, 255, 255, 0.03);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
+    will-change: transform;
+    transform: translateZ(0); /* Hardware accelerate */
+  }
+
+  @media (max-width: 640px) {
+    .glass-premium {
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
   }
 
   .glass-premium:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
-    filter: brightness(1.05);
+    transform: translateY(-4px) scale(1.01) translateZ(0);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
   }
 
   button {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   .btn-gold-glow:hover {
@@ -73,7 +89,15 @@
   }
 
   .premium-overlay {
-    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.2s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  @media (max-width: 640px) {
+    .premium-overlay {
+      backdrop-filter: none;
+      background: rgba(0, 0, 0, 0.9);
+    }
   }
 
   .premium-inner-glow {
@@ -123,6 +147,16 @@
     opacity: 0.09;
     transition: all 4s cubic-bezier(0.4, 0, 0.2, 1);
     mix-blend-mode: screen;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  @media (max-width: 640px) {
+    .dynamic-bg-blob {
+      filter: blur(60px);
+      opacity: 0.05;
+      --blob-display: none; /* Hide heavy animated blobs on mobile */
+    }
   }
 
   .badge {
@@ -158,7 +192,14 @@
   }
 
   .glass-blur {
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(8px);
+  }
+
+  @media (max-width: 640px) {
+    .glass-blur {
+      backdrop-filter: none;
+      background: rgba(0, 0, 0, 0.9);
+    }
   }
 
   .animate-pulse-slow {
@@ -194,6 +235,12 @@
     opacity: 0.015;
     z-index: 50;
     background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+  }
+
+  @media (max-width: 640px) {
+    .noise {
+      display: none; /* Disable expensive noise on mobile */
+    }
   }
 
   .logo-desire {

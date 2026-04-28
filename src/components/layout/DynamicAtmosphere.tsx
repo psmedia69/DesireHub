@@ -37,13 +37,12 @@ export default function DynamicAtmosphere({ category }: DynamicAtmosphereProps) 
             animate={{
               x: ['-10%', '5%', '-10%'],
               y: ['-5%', '10%', '-5%'],
-              scale: [1, 1.2, 1],
             }}
-            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+            transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
             className="dynamic-bg-blob top-[-20%] left-[-20%]"
             style={{ 
               backgroundColor: colors[0],
-              opacity: 0.06
+              display: 'var(--blob-display, block)'
             }}
           />
           
@@ -52,15 +51,17 @@ export default function DynamicAtmosphere({ category }: DynamicAtmosphereProps) 
             animate={{
               x: ['10%', '-5%', '10%'],
               y: ['5%', '-10%', '5%'],
-              scale: [1.2, 1, 1.2],
             }}
-            transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
+            transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
             className="dynamic-bg-blob bottom-[-20%] right-[-20%]"
             style={{ 
               backgroundColor: colors[1],
-              opacity: 0.045
+              display: 'var(--blob-display, block)'
             }}
           />
+
+          {/* Static base for mobile performance */}
+          <div className="absolute inset-0 opacity-20 sm:hidden" style={{ background: `radial-gradient(circle at 0% 0%, ${colors[0]} 0%, transparent 50%), radial-gradient(circle at 100% 100%, ${colors[1]} 0%, transparent 50%)` }} />
 
           {/* Secondary Glow (Center) */}
           <motion.div
@@ -69,7 +70,7 @@ export default function DynamicAtmosphere({ category }: DynamicAtmosphereProps) 
               opacity: [0.015, 0.035, 0.015]
             }}
             transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] rounded-full filter blur-[200px] mix-blend-screen"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] rounded-full filter blur-[120px] mix-blend-screen hidden sm:block"
             style={{ 
               backgroundColor: colors[2]
             }}
