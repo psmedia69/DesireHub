@@ -769,22 +769,18 @@ export default function App() {
           />
         )}
 
-        <AnimatePresence>
-          {selectedModelForDetail && (
-            <ModelDetail
-              model={selectedModelForDetail}
-              allModels={supabaseModels}
-              isOpen={!!selectedModelForDetail}
-              onClose={() => setSelectedModelForDetail(null)}
-              onSelectModel={setSelectedModelForDetail}
-              onInteraction={handleModelUpdate}
-              onRedirect={handleRedirect}
-              isFavorite={selectedModelForDetail ? favorites.includes(selectedModelForDetail.id) : false}
-              favorites={favorites}
-              onToggleFavorite={toggleFavorite}
-            />
-          )}
-        </AnimatePresence>
+        <ModelDetail
+          model={selectedModelForDetail}
+          allModels={supabaseModels}
+          isOpen={!!selectedModelForDetail}
+          onClose={() => setSelectedModelForDetail(null)}
+          onSelectModel={setSelectedModelForDetail}
+          onInteraction={handleModelUpdate}
+          onRedirect={handleRedirect}
+          isFavorite={selectedModelForDetail ? favorites.includes(selectedModelForDetail.id) : false}
+          favorites={favorites}
+          onToggleFavorite={toggleFavorite}
+        />
 
         <RedirectScreen
           model={redirectingModel}

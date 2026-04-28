@@ -90,7 +90,6 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   const handleExpand = async () => {
     // Trigger detail view immediately for better UX
     onCardClick?.(model);
-    toast.info(`Opening ${model.name}'s profile...`, { duration: 1500 });
 
     // Increment views in background
     try {
@@ -270,8 +269,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
 
       {/* Image Container */}
       <div 
-        onClick={handleExpand}
-        className="aspect-[4/5] md:aspect-square overflow-hidden relative bg-black/20 cursor-pointer"
+        className="aspect-[4/5] md:aspect-square overflow-hidden relative bg-black/20"
       >
         <AnimatePresence mode="wait">
           <motion.div
