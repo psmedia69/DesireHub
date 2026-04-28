@@ -86,8 +86,10 @@ export default function ModelDetail({
 
   const currentImageUrl = galleryImages[currentImageIndex] || sanitizeImageUrl(model.thumbnail);
   const [showTeaser, setShowTeaser] = useState(false);
-  const isHot = (model.clicks || 0) >= 20; 
-  const needsTeaser = model.featured || isHot;
+  const isElite = (model.clicks || 0) >= 100;
+  const isTrending = (model.views || 0) >= 100;
+  const isHot = (model.clicks || 0) >= 20 && (model.clicks || 0) < 100;
+  const needsTeaser = model.featured || isElite || isTrending;
 
   const handleNextImage = (e?: React.MouseEvent) => {
     e?.stopPropagation();

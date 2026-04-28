@@ -43,7 +43,7 @@
 @layer components {
   .glass-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(8px); /* Reduced for performance */
+    backdrop-filter: blur(8.8px); /* Increased by 10% */
     border: 1px solid var(--glass-border);
   }
 
@@ -61,7 +61,7 @@
     transition: all 0.3s ease;
     will-change: transform;
     transform: translateZ(0);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(8.8px);
   }
 
   @media (max-width: 640px) {
@@ -92,7 +92,7 @@
 
   .premium-overlay {
     transition: opacity 0.2s ease;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(8.8px);
   }
 
   @media (max-width: 640px) {
@@ -194,7 +194,7 @@
   }
 
   .glass-blur {
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(8.8px);
   }
 
   @media (max-width: 640px) {

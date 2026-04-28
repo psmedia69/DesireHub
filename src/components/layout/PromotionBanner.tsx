@@ -19,7 +19,7 @@ export default function PromotionBanner() {
       >
         <div className="relative group overflow-hidden rounded-[2.5rem] border border-gold/20 bg-linear-to-br from-black via-black/90 to-blue-900/20 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           {/* Animated Background Pulse */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gold/5 blur-[100px] animate-pulse pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gold/5 blur-[110px] animate-pulse pointer-events-none" />
           
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex flex-col gap-4 max-w-xl text-center md:text-left pt-2">

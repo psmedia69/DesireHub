@@ -69,7 +69,7 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
               initial={{ scale: 1.15 }}
               animate={{ 
                 scale: showTeaser ? 1.05 : 1.0,
-                filter: showTeaser ? "blur(12px)" : "blur(0px)"
+                filter: showTeaser ? "blur(13.2px)" : "blur(0px)"
               }}
               transition={{ 
                 scale: { duration: 4, ease: "linear" },
@@ -84,7 +84,7 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
               initial={{ scale: 1.15 }}
               animate={{ 
                 scale: showTeaser ? 1.05 : 1.0,
-                filter: showTeaser ? "blur(12px)" : "blur(0px)"
+                filter: showTeaser ? "blur(13.2px)" : "blur(0px)"
               }}
               transition={{ 
                 scale: { duration: 4, ease: "linear" },
@@ -112,7 +112,7 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
             <Star className="w-3 h-3 fill-white" />
             Admin's Pick
           </div>
-          <div className="px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-white/70 text-[9px] font-black uppercase tracking-[0.2em]">
+          <div className="px-4 py-2 bg-white/5 backdrop-blur-[13.2px] border border-white/10 rounded-full text-white/70 text-[9px] font-black uppercase tracking-[0.2em]">
             Verified Direct
           </div>
         </motion.div>

@@ -50,7 +50,30 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   const isElite = localClicks >= 100;
   const isTrending = localViews >= 100;
   const isHot = localClicks >= 20 && localClicks < 100;
-  const needsTeaser = model.featured || isHot;
+  const needsTeaser = model.featured || isElite || isTrending;
+
+  const [showPromo, setShowPromo] = useState(false);
+
+  // Promo Popup Logic for non-blurred posts (Cycles every 5s, shows at 2s for 2s)
+  useEffect(() => {
+    if (isVisible && !needsTeaser) {
+      let startTime = Date.now();
+      const interval = setInterval(() => {
+        const elapsed = (Date.now() - startTime) % 5000;
+        // Show at 2nd second (2000ms to 4000ms)
+        if (elapsed >= 2000 && elapsed < 4000) {
+          setShowPromo(true);
+        } else {
+          setShowPromo(false);
+        }
+      }, 100); // Check frequently for precise timing
+
+      return () => {
+        clearInterval(interval);
+        setShowPromo(false);
+      };
+    }
+  }, [isVisible, needsTeaser]);
 
   // Teaser logic for Admin's Pick or Hot
   useEffect(() => {
@@ -251,13 +274,13 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         <AnimatePresence mode="wait">
           <motion.div
             key={`${model.id}-${currentMediaIndex}-${currentMediaRound}`}
-            initial={{ opacity: 0, filter: "blur(10px)", scale: 1.05 }}
+            initial={{ opacity: 0, filter: "blur(9px)", scale: 1.05 }}
             animate={{ 
               opacity: isVisible ? 1 : 0, 
-              filter: showTeaser ? "blur(10px)" : "blur(0px)",
+              filter: showTeaser ? "blur(9px)" : "blur(0px)",
               scale: showTeaser ? 1.02 : 1.0
             }}
-            exit={{ opacity: 0, filter: "blur(10px)", scale: 0.98 }}
+            exit={{ opacity: 0, filter: "blur(9px)", scale: 0.98 }}
             transition={{ 
               duration: 1.0,
               ease: "easeInOut"
@@ -292,6 +315,28 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
               />
             )}
           </motion.div>
+        </AnimatePresence>
+        
+        {/* Promo Popup Overlay */}
+        <AnimatePresence>
+          {showPromo && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: "-50%", y: "-40%" }}
+              animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+              exit={{ opacity: 0, scale: 1.1, x: "-50%", y: "-60%" }}
+              className="absolute left-1/2 top-1/2 z-[60] py-4 px-6 bg-black/80 backdrop-blur-2xl border border-gold/40 rounded-3xl text-center shadow-[0_20px_50px_rgba(0,0,0,0.8)] pointer-events-none min-w-[200px]"
+            >
+              <div className="flex flex-col items-center gap-2">
+                <Sparkles className="w-5 h-5 text-gold mb-1 animate-pulse" />
+                <p className="text-[12px] font-black tracking-wider text-white uppercase leading-tight">
+                  All r free! Just Click 
+                </p>
+                <p className="text-[13px] font-black tracking-widest text-gold uppercase mt-0.5">
+                  'UNLOCK ACCESS BELOW' 👇
+                </p>
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
         
         {/* Teaser Message Overlay */}

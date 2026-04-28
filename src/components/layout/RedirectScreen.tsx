@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ShieldCheck, ChevronRight, Lock, Globe, Loader2 } from 'lucide-react';
+import { ShieldCheck, ChevronRight, Lock, Globe, Loader2, Send } from 'lucide-react';
 import { ModelProfile } from '../../types';
 import { cn } from '../../lib/utils';
 import { sanitizeImageUrl, isVideoUrl } from '../../lib/imageUtils';
@@ -17,6 +17,11 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
   const [progress, setProgress] = useState(0);
   const [count, setCount] = useState(Math.ceil(duration / 1000));
   const onCompleteRef = React.useRef(onComplete);
+
+  const isElite = (model?.clicks || 0) >= 100;
+  const isTrending = (model?.views || 0) >= 100;
+  const isAdminPick = model?.featured;
+  const isSpecial = isAdminPick || isElite || isTrending;
 
   // Keep onCompleteRef in sync
   useEffect(() => {
@@ -58,7 +63,9 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
     }, 1000);
 
     const completionTimer = setTimeout(() => {
-      onCompleteRef.current();
+      if (!isSpecial) {
+        onCompleteRef.current();
+      }
     }, duration);
 
     return () => {
@@ -69,6 +76,15 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
   }, [isOpen, duration]);
 
   if (!model) return null;
+
+  const getSpecialFlairs = () => {
+    const flairs = [];
+    if (isAdminPick) flairs.push("Admin's Pick");
+    if (isTrending || isElite) flairs.push("Trending");
+    return flairs.join(" / ");
+  };
+
+  const tgLink = "https://t.me/+fiYQGTL55EdkMDI1";
 
   return (
     <AnimatePresence>
@@ -104,26 +120,38 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                     transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                     className={cn(
                       "absolute -inset-4 border border-dashed rounded-full",
-                      model.featured ? "border-blue-500/30" : "border-gold/30"
+                      isSpecial ? "border-blue-500/30" : "border-gold/30"
                     )}
                   />
                   <div className={cn(
                     "w-20 h-20 rounded-full border flex items-center justify-center relative z-10 transition-colors",
-                    model.featured 
+                    isSpecial 
                       ? "bg-blue-600/10 border-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.22)]" 
                       : "bg-gold/10 border-gold shadow-[0_0_20px_rgba(212,175,55,0.22)]"
                   )}>
-                    <ShieldCheck className={cn("w-10 h-10", model.featured ? "text-blue-500" : "text-gold")} />
+                    <ShieldCheck className={cn("w-10 h-10", isSpecial ? "text-blue-500" : "text-gold")} />
                   </div>
                 </div>
                 
-                <div className="text-center space-y-2">
-                  <div className={cn("flex items-center justify-center gap-3", model.featured ? "text-blue-500" : "text-gold")}>
-                    <span className={cn("h-px w-10", model.featured ? "bg-blue-500/20" : "bg-gold/20")} />
-                    <span className="text-[10px] font-black uppercase tracking-[0.5em]">Secure Gateway</span>
-                    <span className={cn("h-px w-10", model.featured ? "bg-blue-500/20" : "bg-gold/20")} />
+                <div className="text-center space-y-2 px-4">
+                  <div className={cn("flex items-center justify-center gap-3", isSpecial ? "text-blue-500" : "text-gold")}>
+                    <span className={cn("h-px w-10", isSpecial ? "bg-blue-500/20" : "bg-gold/20")} />
+                    <span className="text-[10px] font-black uppercase tracking-[0.5em]">{isSpecial ? "Premium Redirect" : "Secure Gateway"}</span>
+                    <span className={cn("h-px w-10", isSpecial ? "bg-blue-500/20" : "bg-gold/20")} />
                   </div>
-                  <h1 className="text-3xl font-black text-white uppercase italic tracking-tight">Verifying Link</h1>
+                  {isSpecial ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="space-y-4"
+                    >
+                      <h1 className="text-xl md:text-2xl font-black text-white uppercase italic tracking-tight leading-tight">
+                        <span className="text-gold">[{getSpecialFlairs()}]</span> posts are only available on official TG group, other posts are available here
+                      </h1>
+                    </motion.div>
+                  ) : (
+                    <h1 className="text-3xl font-black text-white uppercase italic tracking-tight">Verifying Link</h1>
+                  )}
                 </div>
               </div>
 
@@ -137,7 +165,7 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                     className={cn(
                       "absolute top-1/2 w-32 h-px -translate-y-1/2 blur-sm",
-                      model.featured 
+                      isSpecial 
                         ? "bg-linear-to-r from-transparent via-blue-500 to-transparent" 
                         : "bg-linear-to-r from-transparent via-gold to-transparent"
                     )}
@@ -146,25 +174,34 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                   <div className="flex flex-col items-center gap-3 relative z-10">
                     <div className={cn(
                       "w-16 h-16 rounded-2xl border flex items-center justify-center shadow-2xl transition-colors",
-                      model.featured ? "bg-blue-600/10 border-blue-500" : "bg-gold/10 border-gold"
+                      isSpecial ? "bg-blue-600/10 border-blue-500" : "bg-gold/10 border-gold"
                     )}>
-                      <Globe className={cn("w-8 h-8", model.featured ? "text-blue-500" : "text-gold")} />
+                      <Globe className={cn("w-8 h-8", isSpecial ? "text-blue-500" : "text-gold")} />
                     </div>
                     <span className="text-[9px] font-black text-white/40 uppercase tracking-widest">Main Directory</span>
                   </div>
   
                   <div className="flex flex-col items-center gap-2 relative z-10">
-                    <motion.div 
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                      className={cn(
-                        "text-4xl font-black font-mono italic transition-colors",
-                        model.featured ? "text-blue-500" : "text-gold"
-                      )}
-                    >
-                      {count}s
-                    </motion.div>
-                    <Loader2 className={cn("w-4 h-4 animate-spin", model.featured ? "text-blue-500" : "text-gold")} />
+                    {!isSpecial ? (
+                      <>
+                        <motion.div 
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 1, repeat: Infinity }}
+                          className={cn(
+                            "text-4xl font-black font-mono italic transition-colors",
+                            isSpecial ? "text-blue-500" : "text-gold"
+                          )}
+                        >
+                          {count}s
+                        </motion.div>
+                        <Loader2 className={cn("w-4 h-4 animate-spin", isSpecial ? "text-blue-500" : "text-gold")} />
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center gap-1">
+                        <Send className="w-8 h-8 text-blue-500 animate-pulse" />
+                        <span className="text-[8px] font-black text-blue-500 uppercase tracking-tighter">TG Link</span>
+                      </div>
+                    )}
                   </div>
   
                   <div className="flex flex-col items-center gap-3 relative z-10">
@@ -187,7 +224,7 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                         />
                       )}
                     </div>
-                    <span className={cn("text-[9px] font-black uppercase tracking-widest", model.featured ? "text-blue-500" : "text-gold")}>{model.name}</span>
+                    <span className={cn("text-[9px] font-black uppercase tracking-widest", isSpecial ? "text-blue-500" : "text-gold")}>{model.name}</span>
                   </div>
                 </div>
 
@@ -219,50 +256,66 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                     </motion.div>
                   </div>
 
-                  <div className="space-y-3">
-                  <div className="flex justify-between items-end">
-                    <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">Establishing Connection...</span>
-                    <span className={cn("text-[10px] font-black font-mono", model.featured ? "text-blue-500" : "text-gold")}>{Math.round(progress)}%</span>
-                  </div>
-                  <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
-                    <motion.div 
-                      initial={{ width: "0%" }}
-                      animate={{ width: `${progress}%` }}
-                      className={cn(
-                        "h-full",
-                        model.featured 
-                          ? "bg-linear-to-r from-blue-700 via-blue-500 to-blue-400" 
-                          : "bg-linear-to-r from-gold-dark via-gold to-gold-light"
-                      )}
-                    />
-                  </div>
-                </div>
+                  {!isSpecial && (
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-end">
+                        <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">Establishing Connection...</span>
+                        <span className={cn("text-[10px] font-black font-mono", isSpecial ? "text-blue-500" : "text-gold")}>{Math.round(progress)}%</span>
+                      </div>
+                      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
+                        <motion.div 
+                          initial={{ width: "0%" }}
+                          animate={{ width: `${progress}%` }}
+                          className={cn(
+                            "h-full",
+                            isSpecial 
+                              ? "bg-linear-to-r from-blue-700 via-blue-500 to-blue-400" 
+                              : "bg-linear-to-r from-gold-dark via-gold to-gold-light"
+                          )}
+                        />
+                      </div>
+                    </div>
+                  )}
 
                 <div className="flex flex-col items-center gap-6">
-                  <div className="flex items-center gap-8 text-[9px] font-black uppercase tracking-[0.2em] text-white/20">
-                    <div className="flex items-center gap-2">
-                      <Lock className="w-3 h-3" /> Encrypted
+                  {!isSpecial && (
+                    <div className="flex items-center gap-8 text-[9px] font-black uppercase tracking-[0.2em] text-white/20">
+                      <div className="flex items-center gap-2">
+                        <Lock className="w-3 h-3" /> Encrypted
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Globe className="w-3 h-3" /> External
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className="w-3 h-3" /> Verified
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-3 h-3" /> External
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck className="w-3 h-3" /> Verified
-                    </div>
-                  </div>
+                  )}
 
-                  <button 
-                    onClick={onComplete}
-                    className={cn(
-                      "w-full py-4 font-black uppercase tracking-[0.2em] rounded-2xl transition-all flex items-center justify-center gap-3 group",
-                      model.featured 
-                        ? "bg-blue-600 hover:bg-blue-500 text-white shadow-[0_10px_30px_rgba(37,99,235,0.3)]" 
-                        : "bg-gold hover:bg-gold-light text-black shadow-[0_10px_30px_rgba(212,175,55,0.3)]"
-                    )}
-                  >
-                    Proceed Now
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  {isSpecial ? (
+                    <a 
+                      href={tgLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-5 font-black uppercase tracking-[0.2em] rounded-2xl bg-blue-600 hover:bg-blue-500 text-white shadow-[0_10px_40px_rgba(37,99,235,0.4)] flex items-center justify-center gap-3 group transition-all"
+                    >
+                      Join Official Telegram Group
+                      <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </a>
+                  ) : (
+                    <button 
+                      onClick={onComplete}
+                      className={cn(
+                        "w-full py-4 font-black uppercase tracking-[0.2em] rounded-2xl transition-all flex items-center justify-center gap-3 group",
+                        isSpecial 
+                          ? "bg-blue-600 hover:bg-blue-500 text-white shadow-[0_10px_30px_rgba(37,99,235,0.3)]" 
+                          : "bg-gold hover:bg-gold-light text-black shadow-[0_10px_30px_rgba(212,175,55,0.3)]"
+                      )}
+                    >
+                      Proceed Now
+                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  )}
 
                   <button 
                     onClick={onCancel}
@@ -276,8 +329,9 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
 
               <div className="pt-10 text-center">
                 <p className="text-[9px] font-medium text-white/20 uppercase tracking-[0.2em] leading-relaxed max-w-sm mx-auto">
-                  You are being redirected to a third-party platform. 
-                  Please ensure you follow their safety protocols.
+                  {isSpecial 
+                    ? "Premium content is curated exclusively for our community members. Join to get instant access."
+                    : "You are being redirected to a third-party platform. Please ensure you follow their safety protocols."}
                 </p>
               </div>
             </motion.div>
@@ -286,6 +340,7 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
       )}
     </AnimatePresence>
   );
+
 }
 
 function XIcon({ className }: { className?: string }) {
