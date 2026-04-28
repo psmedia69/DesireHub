@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Navbar from "./components/layout/Navbar";
 import CategoryFilters from "./components/filters/CategoryFilters";
 import SortingFilters from "./components/filters/SortingFilters";
@@ -15,11 +15,14 @@ import SpreadTheWordModal from "./components/layout/SpreadTheWordModal";
 import AgeVerification from "./components/layout/AgeVerification";
 import { ViewModePopup } from "./components/layout/ViewModePopup";
 import RedirectScreen from "./components/layout/RedirectScreen";
+import ScrollTriggerPopup from "./components/layout/ScrollTriggerPopup";
+import ExitIntentModal from "./components/layout/ExitIntentModal";
+import InFeedCTA from "./components/layout/InFeedCTA";
 import BackToTop from "./components/ui/BackToTop";
 import { ModelProfile, ModelCategory, SortOption } from "./types";
 import { motion, AnimatePresence } from "motion/react";
 import { MousePointer2, Compass, Star, Heart, Sparkles, Instagram, Twitter, Facebook } from "lucide-react";
-import { cn } from "./lib/utils";
+import { cn, getFakeViews } from "./lib/utils";
 import { supabase } from "./lib/supabase";
 import { Toaster, toast } from 'sonner';
 
@@ -353,7 +356,7 @@ export default function App() {
     );
   };
 
-  const totalClicks = useMemo(() => supabaseModels.reduce((acc, model) => acc + (model.views || 0), 0), [supabaseModels]);
+  const totalClicks = useMemo(() => supabaseModels.reduce((acc, model) => acc + getFakeViews(model.views || 0, model.createdAt), 0), [supabaseModels]);
 
   const [isShuffling, setIsShuffling] = useState(false);
 
@@ -496,7 +499,7 @@ export default function App() {
                     >
                       🍑
                     </motion.span>
-                    {isShuffling ? "Shuffling..." : "🍑 Unlock Random Profile 🥵"}
+                    {isShuffling ? "Shuffling..." : "Unlock Random Profile"}
                   </button>
                 </motion.div>
               )}
@@ -528,7 +531,7 @@ export default function App() {
                     >
                       🍑
                     </motion.span>
-                    {isShuffling ? "Shuffling..." : "🍑 Unlock Random Profile 🥵"}
+                    {isShuffling ? "Shuffling..." : "Unlock Random Profile"}
                   </button>
                 </motion.div>
               )}
@@ -657,35 +660,39 @@ export default function App() {
               </motion.div>
             ) : (
               filteredModels.map((model, idx) => (
-                <motion.div
-                  key={model.id}
-                  layout
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ 
-                    duration: 0.3, 
-                    delay: idx * 0.02,
-                    ease: "easeOut"
-                  }}
-                >
-                  <ModelCard 
-                    model={model} 
-                    isAdmin={!!user} 
-                    onEdit={(m) => setEditingModel(m)}
-                    onDeleteSuccess={fetchSupabaseModels}
-                    isFavorite={favorites.includes(model.id)}
-                    onToggleFavorite={toggleFavorite}
-                    onInteraction={(updates) => handleModelUpdate(model.id, updates)}
-                    onCardClick={(m) => setSelectedModelForDetail(m)}
-                    onCountryClick={(country) => {
-                      setCountryFilter(country);
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                      toast.success(`Filtering by ${country}`, { icon: '🌍' });
+                <React.Fragment key={model.id}>
+                  {idx > 0 && idx % 6 === 0 && (
+                    <InFeedCTA viewMode={viewMode} />
+                  )}
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ 
+                      duration: 0.3, 
+                      delay: idx * 0.02,
+                      ease: "easeOut"
                     }}
-                    onRedirect={handleRedirect}
-                  />
-                </motion.div>
+                  >
+                    <ModelCard 
+                      model={model} 
+                      isAdmin={!!user} 
+                      onEdit={(m) => setEditingModel(m)}
+                      onDeleteSuccess={fetchSupabaseModels}
+                      isFavorite={favorites.includes(model.id)}
+                      onToggleFavorite={toggleFavorite}
+                      onInteraction={(updates) => handleModelUpdate(model.id, updates)}
+                      onCardClick={(m) => setSelectedModelForDetail(m)}
+                      onCountryClick={(country) => {
+                        setCountryFilter(country);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        toast.success(`Filtering by ${country}`, { icon: '🌍' });
+                      }}
+                      onRedirect={handleRedirect}
+                    />
+                  </motion.div>
+                </React.Fragment>
               ))
             )}
           </AnimatePresence>
@@ -795,6 +802,9 @@ export default function App() {
           isOpen={isSpreadTheWordOpen} 
           onClose={() => setIsSpreadTheWordOpen(false)} 
         />
+
+        <ScrollTriggerPopup />
+        <ExitIntentModal onContinue={handleSurpriseMe} />
         </div>
       </main>
 

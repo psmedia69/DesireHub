@@ -6,6 +6,7 @@ import { cn } from "@/src/lib/utils";
 import { supabase } from "@/src/lib/supabase";
 import { toast } from "sonner";
 import { isVideoUrl, sanitizeImageUrl } from "@/src/lib/imageUtils";
+import { getFakeViews } from "@/src/lib/utils";
 
 interface ModelCardProps {
   model: ModelProfile;
@@ -25,8 +26,10 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [localClicks, setLocalClicks] = useState(model.clicks || 0);
-  const [localViews, setLocalViews] = useState(model.views || 0);
+  const fakeViews = useMemo(() => getFakeViews(model.views || 0, model.createdAt), [model.views, model.createdAt]);
+  const [localViews, setLocalViews] = useState(fakeViews);
   const [showTeaser, setShowTeaser] = useState(false);
+  const [isTeasing, setIsTeasing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -277,7 +280,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
             initial={{ opacity: 0, filter: "blur(9px)", scale: 1.05 }}
             animate={{ 
               opacity: isVisible ? 1 : 0, 
-              filter: showTeaser ? "blur(9px)" : "blur(0px)",
+              filter: showTeaser ? (isTeasing ? "blur(3px)" : "blur(9px)") : "blur(0px)",
               scale: showTeaser ? 1.02 : 1.0
             }}
             exit={{ opacity: 0, filter: "blur(9px)", scale: 0.98 }}
@@ -346,6 +349,10 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
+              onMouseEnter={() => setIsTeasing(true)}
+              onMouseLeave={() => setIsTeasing(false)}
+              onTouchStart={() => setIsTeasing(true)}
+              onTouchEnd={() => setIsTeasing(false)}
               className="absolute inset-0 z-40 bg-black/40 backdrop-blur-[1px] flex flex-col items-center justify-center p-6 text-center select-none"
             >
               <motion.div 
