@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { ModelProfile } from '@/src/types';
 import { isVideoUrl, sanitizeImageUrl } from '@/src/lib/imageUtils';
 import { Star, ArrowRight, Play } from 'lucide-react';
+import { cn } from '@/src/lib/utils';
 
 interface FeaturedHeroProps {
   model: ModelProfile;

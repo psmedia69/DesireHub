@@ -279,9 +279,9 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
                   </span>
                 </h5>
                 <p className="text-white font-black text-[10px] sm:text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 drop-shadow-md">
-                  FOR FREE ACCESS <Video className="w-4 h-4 text-gold animate-pulse" />
-                </p>
-              </div>
+                   FOR FREE ACCESS <Video className="w-4 h-4 text-gold animate-pulse" />
+                 </p>
+               </div>
               
               {/* Subtle pulsing ring */}
               <motion.div 

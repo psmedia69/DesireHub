@@ -456,8 +456,6 @@ export default function App() {
 
         <SensualBanner viewMode={viewMode} />
 
-        <PromotionBanner />
-
         {/* Filters and Search Area */}
         <div className="flex flex-col gap-8 mb-16 px-2">
           {/* Category Filters Row - Locked on top */}

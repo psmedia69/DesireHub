@@ -157,7 +157,7 @@ export default function ModelDetail({
                       animate={{ 
                         scale: showTeaser ? 1.05 : 1.0, 
                         filter: showTeaser ? "blur(14px)" : "blur(0px)" 
-                      }}
+                       }}
                       transition={{ 
                         scale: { duration: 3, ease: "linear" },
                         filter: { duration: 1, ease: "easeInOut" }
@@ -184,7 +184,7 @@ export default function ModelDetail({
                         <p className="text-gold font-black text-xs uppercase tracking-[0.3em] mb-1 italic">
                           {model.featured ? "Admin's pick" : "Private Access"}
                         </p>
-                        <p className="text-white/80 text-[10px] uppercase font-bold tracking-widest">
+                        <p className="text-white/80 text-[10px] uppercase font-bold tracking-widest mb-1">
                           For Free Access
                         </p>
                       </motion.div>
