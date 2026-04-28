@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect } from "react";
+import React, { useState, memo, useEffect, useMemo } from "react";
 import { ModelProfile } from "@/src/types";
 import { motion, AnimatePresence } from "motion/react";
 import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye, Compass, ShieldCheck, Lock, Video } from "lucide-react";
@@ -62,7 +62,21 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   };
 
   const thumbnail = sanitizeImageUrl(model.thumbnail);
-  const images = [thumbnail, ...(model.gallery || []).map(url => sanitizeImageUrl(url))].filter(Boolean);
+  const images = useMemo(() => [thumbnail, ...(model.gallery || []).map(url => sanitizeImageUrl(url))].filter(Boolean), [thumbnail, model.gallery]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Automatic slideshow logic
+  useEffect(() => {
+    if (images.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 4000); // Changed to 4 seconds to give users time to see each item
+    
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  const currentMedia = images[currentImageIndex] || thumbnail;
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -210,47 +224,47 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
 
       {/* Image Container */}
       <div 
-        className="aspect-[4/5] md:aspect-square overflow-hidden relative"
+        className="aspect-[4/5] md:aspect-square overflow-hidden relative bg-black/20"
       >
-        {isVideoUrl(thumbnail) ? (
-          <motion.video
-            src={thumbnail}
-            autoPlay
-            loop
-            muted
-            playsInline
-            initial={{ scale: 1.1 }}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`${model.id}-${currentImageIndex}`}
+            initial={{ opacity: 0, filter: "blur(15px)", scale: 1.1 }}
             animate={{ 
-              scale: showTeaser ? 1.05 : 1.0, 
-              filter: showTeaser ? "blur(12px)" : "blur(0px)" 
+              opacity: 1, 
+              filter: showTeaser ? "blur(12px)" : "blur(0px)",
+              scale: showTeaser ? 1.05 : 1.0
             }}
+            exit={{ opacity: 0, filter: "blur(15px)", scale: 1.1 }}
             transition={{ 
-              scale: { duration: 3, ease: "linear" },
-              filter: { duration: 0.8, ease: "easeOut" }
+              duration: 0.8,
+              ease: "easeInOut"
             }}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <motion.img
-            src={thumbnail}
-            alt={model.name}
-            loading="lazy"
-            initial={{ scale: 1.1 }}
-            animate={{ 
-              scale: showTeaser ? 1.05 : 1.0,
-              filter: showTeaser ? "blur(12px)" : "blur(0px)"
-            }}
-            transition={{ 
-              scale: { duration: 3, ease: "linear" },
-              filter: { duration: 0.8, ease: "easeOut" }
-            }}
-            className={cn(
-              "w-full h-full object-cover",
-              !showTeaser && "group-hover:scale-105 transition-transform duration-700"
+            className="w-full h-full absolute inset-0"
+          >
+            {isVideoUrl(currentMedia) ? (
+              <video
+                src={currentMedia}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <img
+                src={currentMedia}
+                alt={model.name}
+                loading="lazy"
+                className={cn(
+                  "w-full h-full object-cover",
+                  !showTeaser && "group-hover:scale-105 transition-transform duration-700"
+                )}
+                referrerPolicy="no-referrer"
+              />
             )}
-            referrerPolicy="no-referrer"
-          />
-        )}
+          </motion.div>
+        </AnimatePresence>
         
         {/* Teaser Message Overlay */}
         <AnimatePresence>
