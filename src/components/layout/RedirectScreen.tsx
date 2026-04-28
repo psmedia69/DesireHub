@@ -150,7 +150,7 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                       </h1>
                     </motion.div>
                   ) : (
-                    <h1 className="text-3xl font-black text-white uppercase italic tracking-tight">Verifying Link</h1>
+                    <h1 className="text-3xl font-black text-white uppercase italic tracking-tight leading-tight">⚡ High demand — access may close soon</h1>
                   )}
                 </div>
               </div>
@@ -312,7 +312,7 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                           : "bg-gold hover:bg-gold-light text-black shadow-[0_10px_30px_rgba(212,175,55,0.3)]"
                       )}
                     >
-                      Proceed Now
+                      Verify & Continue
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
                   )}

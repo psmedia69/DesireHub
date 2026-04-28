@@ -31,7 +31,7 @@ export default function SensualBanner({ viewMode }: SensualBannerProps) {
             "font-cinzel font-bold text-white tracking-tighter leading-tight max-w-2xl",
             viewMode === 'Phone' ? "text-3xl" : "text-5xl md:text-6xl"
           )}>
-            Access <span className="text-gold-gradient italic">Hidden</span> Profiles
+            🔒 Private Profiles <span className="text-gold-gradient italic">Hidden</span>
           </h2>
 
           <div className="relative">
@@ -50,7 +50,7 @@ export default function SensualBanner({ viewMode }: SensualBannerProps) {
                 viewMode === 'Phone' ? "text-lg" : "text-xl md:text-2xl"
               )}
             >
-              All are free! Click below each post.
+              Only selected users can unlock full access.<br/>Tap below to continue.
             </motion.p>
             {/* Animated Underline */}
             <motion.div 
@@ -78,10 +78,9 @@ export default function SensualBanner({ viewMode }: SensualBannerProps) {
             </div>
             <div className="flex flex-col text-left">
               <div className="flex items-center gap-3">
-                <span className="text-white font-black text-[10px] sm:text-[12px] uppercase tracking-[0.25em]">Join Main Community</span>
-                <span className="px-2 py-0.5 bg-blue-500 text-white text-[8px] font-black uppercase rounded-sm animate-pulse tracking-tighter">Live Now</span>
+                <span className="text-white font-black text-[10px] sm:text-[12px] uppercase tracking-[0.25em]">Continue Unlock Process</span>
               </div>
-              <span className="text-white/50 text-[10px] sm:text-[11px] uppercase tracking-widest mt-1.5 leading-relaxed">Daily Exclusive Updates & Redirects</span>
+              <span className="text-white/50 text-[10px] sm:text-[11px] uppercase tracking-widest mt-1.5 leading-relaxed">Secure access via private channel</span>
             </div>
             <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/tg:animate-[shimmer_3s_infinite]" />
           </motion.a>

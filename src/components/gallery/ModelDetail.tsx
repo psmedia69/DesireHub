@@ -1,11 +1,11 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Eye, TrendingUp, Sparkles, Share2, Heart, ExternalLink, MapPin, Grid, Camera, Lock, Video, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Eye, TrendingUp, Sparkles, Share2, Heart, ExternalLink, MapPin, Grid, Camera, Lock, Video, ChevronLeft, ChevronRight, Star, Flame } from 'lucide-react';
 import { ModelProfile } from '../../types';
 import { cn } from '../../lib/utils';
 import { isVideoUrl, sanitizeImageUrl } from '../../lib/imageUtils';
-import ModelCard from './ModelCard';
-import { supabase } from '@/src/lib/supabase';
+import { supabase } from '../../lib/supabase';
+import { toast } from 'sonner';
 
 interface ModelDetailProps {
   model: ModelProfile | null;
@@ -60,12 +60,26 @@ export default function ModelDetail({
       });
   };
 
-  const relatedModels = useMemo(() => {
-    if (!model) return [];
-    return allModels
-      .filter(m => m.category === model.category && m.id !== model.id)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 4);
+  const recommendations = useMemo(() => {
+    if (!model || allModels.length === 0) return [];
+
+    const adminPick = allModels.find(m => m.featured && m.id !== model.id);
+    const normal = allModels.find(m => !m.featured && (m.clicks || 0) < 20 && m.id !== model.id);
+    const hot = allModels.find(m => (m.clicks || 0) >= 20 && (m.clicks || 0) < 100 && m.id !== model.id);
+
+    const result = [adminPick, normal, hot].filter(Boolean) as ModelProfile[];
+    
+    if (result.length < 3) {
+      const remaining = allModels
+        .filter(m => m.id !== model.id && !result.find(r => r.id === m.id))
+        .sort(() => Math.random() - 0.5);
+      
+      while (result.length < 3 && remaining.length > 0) {
+        result.push(remaining.pop()!);
+      }
+    }
+
+    return result.slice(0, 3);
   }, [model, allModels]);
 
   const galleryImages = useMemo(() => {
@@ -113,7 +127,7 @@ export default function ModelDetail({
   }, [isOpen, needsTeaser]);
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12">
           {/* Backdrop with Blur */}
@@ -122,41 +136,41 @@ export default function ModelDetail({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/95"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
           />
 
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-            className="relative w-full max-w-sm max-h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-[1.5rem] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,1)] flex flex-col"
+            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="relative w-full max-w-lg max-h-[90vh] bg-neutral-950 border border-white/20 rounded-[2rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,1),0_0_0_1px_rgba(255,255,255,0.1)] flex flex-col z-[110]"
           >
             {/* Header / Close Button */}
-            <div className="absolute top-2 right-2 z-[60]">
+            <div className="absolute top-4 right-4 z-[120]">
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="w-6 h-6 rounded-full bg-black/80 border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all shadow-xl"
+                className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/80 hover:text-white transition-all shadow-xl"
               >
-                <X className="w-3 h-3" />
+                <X className="w-5 h-5" />
               </motion.button>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 overflow-y-auto custom-scrollbar bg-black">
               <div className="flex flex-col min-h-full">
                 {/* Image / Gallery Section */}
                 <div 
-                  className="relative w-full aspect-square overflow-hidden bg-black"
+                  className="relative w-full aspect-[4/5] overflow-hidden bg-black/40"
                 >
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currentImageIndex}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.3 }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.4 }}
                       className="w-full h-full"
                     >
                       {isVideoUrl(currentImageUrl) ? (
@@ -166,14 +180,11 @@ export default function ModelDetail({
                           loop
                           muted
                           playsInline
-                          initial={{ scale: 1.15 }}
                           animate={{ 
-                            scale: showTeaser ? 1.05 : 1.0, 
-                            filter: showTeaser ? "blur(14px)" : "blur(0px)" 
+                            filter: showTeaser ? "blur(20px)" : "blur(0px)" 
                           }}
                           transition={{ 
-                            scale: { duration: 3, ease: "linear" },
-                            filter: { duration: 1, ease: "easeInOut" }
+                            filter: { duration: 1.5, ease: "easeInOut" }
                           }}
                           className="w-full h-full object-cover"
                         />
@@ -181,14 +192,11 @@ export default function ModelDetail({
                         <motion.img
                           src={currentImageUrl}
                           alt={model.name}
-                          initial={{ scale: 1.15 }}
                           animate={{ 
-                            scale: showTeaser ? 1.05 : 1.0, 
-                            filter: showTeaser ? "blur(14px)" : "blur(0px)" 
+                            filter: showTeaser ? "blur(20px)" : "blur(0px)" 
                           }}
                           transition={{ 
-                            scale: { duration: 3, ease: "linear" },
-                            filter: { duration: 1, ease: "easeInOut" }
+                            filter: { duration: 1.5, ease: "easeInOut" }
                           }}
                           className="w-full h-full object-cover"
                           referrerPolicy="no-referrer"
@@ -200,27 +208,30 @@ export default function ModelDetail({
                   {/* Gallery Navigation UI */}
                   {galleryImages.length > 1 && !showTeaser && (
                     <>
+                      <div className="absolute inset-y-0 left-0 w-1/4 z-50 cursor-pointer" onClick={handlePrevImage} />
+                      <div className="absolute inset-y-0 right-0 w-1/4 z-50 cursor-pointer" onClick={handleNextImage} />
+                      
                       <button 
                         onClick={handlePrevImage}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/40 border border-white/10 text-white z-50 hover:bg-black/60 transition-all"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 text-white z-50 flex items-center justify-center hover:bg-black/60 transition-all"
                       >
-                        <ChevronLeft className="w-4 h-4" />
+                        <ChevronLeft className="w-6 h-6" />
                       </button>
                       <button 
                         onClick={handleNextImage}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/40 border border-white/10 text-white z-50 hover:bg-black/60 transition-all"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 text-white z-50 flex items-center justify-center hover:bg-black/60 transition-all"
                       >
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="w-6 h-6" />
                       </button>
                       
                       {/* Pagination Dots */}
-                      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1.5 z-50">
+                      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-2 z-50 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-sm border border-white/10">
                         {galleryImages.map((_, i) => (
                           <div 
                             key={i}
                             className={cn(
                               "w-1.5 h-1.5 rounded-full transition-all duration-300",
-                              i === currentImageIndex ? "bg-gold w-4" : "bg-white/20"
+                              i === currentImageIndex ? "bg-gold scale-125" : "bg-white/30"
                             )}
                           />
                         ))}
@@ -232,102 +243,198 @@ export default function ModelDetail({
                   <AnimatePresence>
                     {showTeaser && (
                       <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="absolute inset-0 z-40 bg-black/20 flex flex-col items-center justify-center p-6 text-center"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 1.1 }}
+                        className="absolute inset-0 z-40 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center"
                       >
-                        <div className="bg-gold p-3 rounded-full mb-4 shadow-2xl">
-                          <Lock className="w-6 h-6 text-black" />
-                        </div>
-                        <h2 className="text-white font-black text-lg uppercase tracking-[0.2em] mb-2 drop-shadow-xl">
-                          Click Below To Unlock
+                        <motion.div 
+                          animate={{ 
+                            scale: [1, 1.1, 1],
+                            rotate: [0, 5, -5, 0]
+                          }}
+                          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                          className="bg-gold p-4 rounded-full mb-6 shadow-[0_0_50px_rgba(212,175,55,0.4)]"
+                        >
+                          <Lock className="w-8 h-8 text-black" />
+                        </motion.div>
+                        <h2 className="text-white font-black text-2xl uppercase tracking-[0.2em] mb-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+                          Locked Profile
                         </h2>
-                        <p className="text-gold font-black text-xs uppercase tracking-[0.3em] mb-1 italic">
-                          {model.featured ? "Admin's pick" : "Private Access"}
+                        <p className="text-white font-bold text-xs uppercase tracking-[0.3em] mb-4 opacity-80">
+                          {model.featured ? "Exclusive Admin's pick" : "Premium Member Content"}
                         </p>
-                        <p className="text-white/80 text-[10px] uppercase font-bold tracking-widest mb-1">
-                          For Free Access
-                        </p>
+                        <div className="px-6 py-2 bg-white/10 rounded-full border border-white/20 backdrop-blur-md">
+                          <p className="text-white font-black text-[10px] uppercase tracking-[0.25em]">
+                            Click 'Unlock Access' Below
+                          </p>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
 
-                  <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent opacity-90" />
                   
-                  <div className="absolute bottom-3 left-3 right-3 text-left">
-                    <h1 className="text-xl font-black text-white uppercase tracking-tighter italic leading-tight">
-                      {model.name}
-                    </h1>
-                    <div className="flex items-center gap-2 mt-1 opacity-80">
-                      <span className="text-white/60 text-[8px] font-black uppercase tracking-widest">{model.countryName || "Global"}</span>
-                      <span className="text-white/20 text-[8px]">•</span>
-                      <span className="text-white/60 text-[8px] font-black uppercase tracking-widest">{model.displayCategory || model.category}</span>
-                      <span className="text-white/20 text-[8px]">•</span>
-                      <span className="text-white/60 text-[8px] font-black uppercase tracking-widest">{model.followersCount || "Verified"}</span>
-                    </div>
+                  <div className="absolute bottom-6 left-6 right-6 text-left z-30">
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <h1 className="text-3xl font-black text-white uppercase tracking-tight italic leading-none mb-2">
+                        {model.name}
+                      </h1>
+                      <div className="flex items-center gap-3 opacity-90">
+                        <span className="flex items-center gap-1.5 px-2.5 py-1 bg-white/10 rounded-md border border-white/10 text-white text-[10px] font-black uppercase tracking-widest">
+                          <MapPin className="w-3 h-3 text-gold" />
+                          {model.countryName || "Global"}
+                        </span>
+                        <span className="text-white/40 text-xs">•</span>
+                        <span className="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">{model.displayCategory || model.category}</span>
+                      </div>
+                    </motion.div>
                   </div>
                 </div>
 
                 {/* Info Section */}
-                <div className="p-4 flex flex-col gap-4 bg-linear-to-b from-[#0a0a0a] to-[#050505]">
-                  <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.5 bg-gold/10 border border-gold/30 rounded-full text-[6px] font-black text-gold uppercase tracking-[0.2em]">
-                      {model.category}
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 pb-2 border-b border-white/5">
-                    <div className="text-center">
-                      <div className="text-[5px] font-black uppercase tracking-widest text-white/20 mb-1">Views</div>
-                      <div className="text-sm font-black text-white tabular-nums leading-none">
+                <div className="p-6 flex flex-col gap-6 bg-black">
+                  <div className="grid grid-cols-3 gap-4 py-6 border-y border-white/5 bg-white/[0.02] rounded-2xl px-4">
+                    <div className="flex flex-col items-center">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">Views</div>
+                      <div className="text-lg font-black text-white tabular-nums flex items-center gap-2">
+                        <Eye className="w-4 h-4 text-white/40" />
                         {(model.views || 0).toLocaleString()}
                       </div>
                     </div>
-                    <div className="text-center border-l border-white/5">
-                      <div className="text-[5px] font-black uppercase tracking-widest text-gold/40 mb-1">Heat</div>
-                      <div className="text-sm font-black text-gold tabular-nums leading-none">
+                    <div className="flex flex-col items-center border-x border-white/5">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gold/40 mb-2">Heat</div>
+                      <div className="text-lg font-black text-gold tabular-nums flex items-center gap-2">
+                        <Flame className="w-4 h-4 text-gold/40" />
                         {model.heatScore}
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">Status</div>
+                      <div className="text-lg font-black text-white flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-xs">LIVE</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-4">
                     <motion.button
                       onClick={handleLinkClick}
-                      whileHover={{ scale: 1.02, y: -1 }}
+                      whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
                       className={cn(
-                        "group relative w-full h-9 rounded-lg flex items-center justify-center gap-2 overflow-hidden shadow-lg transition-all",
+                        "group relative w-full h-14 rounded-2xl flex items-center justify-center gap-3 overflow-hidden shadow-2xl transition-all",
                         model.featured 
                           ? "bg-linear-to-r from-blue-600 via-cyan-400 to-blue-500" 
                           : "bg-linear-to-r from-[#bf953f] via-[#fcf6ba] to-[#b38728]"
                       )}
                     >
                       <span className={cn(
-                        "relative z-10 text-[9px] font-black uppercase tracking-[0.2em] italic",
+                        "relative z-10 text-xs font-black uppercase tracking-[0.3em] italic",
                         model.featured ? "text-white" : "text-black"
                       )}>
                         {model.featured ? "ADMIN'S PICK" : "UNLOCK ACCESS"}
                       </span>
-                      <ExternalLink className={cn("relative z-10 w-3 h-3", model.featured ? "text-white" : "text-black")} />
+                      <ExternalLink className={cn("relative z-10 w-4 h-4", model.featured ? "text-white" : "text-black")} />
+                      
+                      {/* Shimmer */}
+                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
                     </motion.button>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-4">
                       <button
                         onClick={() => onToggleFavorite?.(model.id)}
                         className={cn(
-                          "flex-1 h-8 rounded-lg border flex items-center justify-center gap-2 transition-all font-black uppercase tracking-widest text-[6px]",
+                          "flex-1 h-12 rounded-xl border flex items-center justify-center gap-2 transition-all font-black uppercase tracking-[0.2em] text-[10px]",
                           isFavorite 
                             ? "bg-red-500/10 border-red-500 text-red-500" 
                             : "bg-white/5 border-white/10 text-white/40 hover:text-white"
                         )}
                       >
-                        <Heart className={cn("w-2.5 h-2.5", isFavorite && "fill-current")} />
-                        {isFavorite ? "Saved" : "Save"}
+                        <Heart className={cn("w-4 h-4", isFavorite && "fill-current")} />
+                        {isFavorite ? "Saved to Profile" : "Bookmark Profile"}
                       </button>
-                      <button className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/40">
-                        <Share2 className="w-2.5 h-2.5" />
+                      <button 
+                        onClick={() => {
+                          navigator.clipboard.writeText(window.location.href);
+                          toast.success("Link copied!");
+                        }}
+                        className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white transition-all"
+                      >
+                        <Share2 className="w-4 h-4" />
                       </button>
+                    </div>
+                  </div>
+
+                  {/* Recommendation Loop */}
+                  <div className="mt-8 pt-8 border-t border-white/10">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-gold" />
+                        <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-white/60">Users also unlocked</h3>
+                      </div>
+                      <div className="h-px flex-1 ml-4 bg-linear-to-r from-white/10 to-transparent" />
+                    </div>
+                    
+                    <div className="flex flex-col gap-4">
+                      {recommendations.map((rec) => (
+                        <motion.div
+                          key={rec.id}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectModel?.(rec);
+                          }}
+                          className="group relative flex items-center gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-gold/40 hover:bg-gold/5 transition-all cursor-pointer shadow-lg outline-none focus:ring-1 focus:ring-gold/50"
+                        >
+                          <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-white/10">
+                            <img 
+                              src={sanitizeImageUrl(rec.thumbnail)} 
+                              alt={rec.name}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                              referrerPolicy="no-referrer"
+                            />
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h4 className="text-[13px] font-black text-white uppercase tracking-tight truncate leading-tight italic">
+                                {rec.name}
+                              </h4>
+                              {rec.featured && (
+                                <div className="p-0.5 bg-blue-500 rounded-sm">
+                                  <Star className="w-2.5 h-2.5 fill-white text-white" />
+                                </div>
+                              )}
+                              {(rec.clicks || 0) >= 20 && (rec.clicks || 0) < 100 && (
+                                <Flame className="w-3 h-3 text-gold" />
+                              )}
+                            </div>
+                            <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest mb-2">
+                              {rec.displayCategory || rec.category} • {rec.countryName || "Global"}
+                            </p>
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-1 text-[8px] font-black text-gold/60 uppercase">
+                                <TrendingUp className="w-3 h-3" />
+                                {rec.heatScore} Impact
+                              </div>
+                              <div className="w-1 h-1 rounded-full bg-white/20" />
+                              <div className="text-[8px] font-bold text-white/30 uppercase tracking-tighter">
+                                Click to preview
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:bg-gold/20 transition-all">
+                            <ChevronRight className="w-4 h-4 text-gold" />
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -336,6 +443,6 @@ export default function ModelDetail({
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }

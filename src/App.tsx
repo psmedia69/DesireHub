@@ -496,7 +496,7 @@ export default function App() {
                     >
                       🍑
                     </motion.span>
-                    {isShuffling ? "Shuffling..." : "Unlock a Surprise"}
+                    {isShuffling ? "Shuffling..." : "🍑 Unlock Random Profile 🥵"}
                   </button>
                 </motion.div>
               )}
@@ -528,7 +528,7 @@ export default function App() {
                     >
                       🍑
                     </motion.span>
-                    {isShuffling ? "Shuffling..." : "Unlock a Surprise"}
+                    {isShuffling ? "Shuffling..." : "🍑 Unlock Random Profile 🥵"}
                   </button>
                 </motion.div>
               )}
@@ -769,18 +769,22 @@ export default function App() {
           />
         )}
 
-        <ModelDetail
-          model={selectedModelForDetail}
-          allModels={supabaseModels}
-          isOpen={!!selectedModelForDetail}
-          onClose={() => setSelectedModelForDetail(null)}
-          onSelectModel={setSelectedModelForDetail}
-          onInteraction={handleModelUpdate}
-          onRedirect={handleRedirect}
-          isFavorite={selectedModelForDetail ? favorites.includes(selectedModelForDetail.id) : false}
-          favorites={favorites}
-          onToggleFavorite={toggleFavorite}
-        />
+        <AnimatePresence>
+          {selectedModelForDetail && (
+            <ModelDetail
+              model={selectedModelForDetail}
+              allModels={supabaseModels}
+              isOpen={!!selectedModelForDetail}
+              onClose={() => setSelectedModelForDetail(null)}
+              onSelectModel={setSelectedModelForDetail}
+              onInteraction={handleModelUpdate}
+              onRedirect={handleRedirect}
+              isFavorite={selectedModelForDetail ? favorites.includes(selectedModelForDetail.id) : false}
+              favorites={favorites}
+              onToggleFavorite={toggleFavorite}
+            />
+          )}
+        </AnimatePresence>
 
         <RedirectScreen
           model={redirectingModel}

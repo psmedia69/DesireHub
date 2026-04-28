@@ -90,6 +90,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   const handleExpand = async () => {
     // Trigger detail view immediately for better UX
     onCardClick?.(model);
+    toast.info(`Opening ${model.name}'s profile...`, { duration: 1500 });
 
     // Increment views in background
     try {
@@ -269,7 +270,8 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
 
       {/* Image Container */}
       <div 
-        className="aspect-[4/5] md:aspect-square overflow-hidden relative bg-black/20"
+        onClick={handleExpand}
+        className="aspect-[4/5] md:aspect-square overflow-hidden relative bg-black/20 cursor-pointer"
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -329,10 +331,10 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
               <div className="flex flex-col items-center gap-2">
                 <Sparkles className="w-5 h-5 text-gold mb-1 animate-pulse" />
                 <p className="text-[12px] font-black tracking-wider text-white uppercase leading-tight">
-                  All r free! Just Click 
+                  🔒 Locked Profile
                 </p>
                 <p className="text-[13px] font-black tracking-widest text-gold uppercase mt-0.5">
-                  'UNLOCK ACCESS BELOW' 👇
+                  Tap to unlock access 👇
                 </p>
               </div>
             </motion.div>
