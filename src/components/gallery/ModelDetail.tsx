@@ -1,6 +1,6 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Eye, TrendingUp, Sparkles, Share2, Heart, ExternalLink, MapPin, Grid, Camera, Lock, Video } from 'lucide-react';
+import { X, Eye, TrendingUp, Sparkles, Share2, Heart, ExternalLink, MapPin, Grid, Camera, Lock, Video, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ModelProfile } from '../../types';
 import { cn } from '../../lib/utils';
 import { isVideoUrl, sanitizeImageUrl } from '../../lib/imageUtils';
@@ -70,17 +70,34 @@ export default function ModelDetail({
 
   const galleryImages = useMemo(() => {
     if (!model) return [];
-    return [model.thumbnail, ...(model.gallery || [])]
+    const images = [model.thumbnail, ...(model.gallery || [])]
       .filter(Boolean)
       .map(url => sanitizeImageUrl(url as string));
+    return images;
   }, [model]);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [model?.id]);
 
   if (!model) return null;
 
-  const thumbnail = sanitizeImageUrl(model.thumbnail);
+  const currentImageUrl = galleryImages[currentImageIndex] || sanitizeImageUrl(model.thumbnail);
   const [showTeaser, setShowTeaser] = useState(false);
-  const isHot = (model.clicks || 0) >= 20; // Consistent with ModelCard
+  const isHot = (model.clicks || 0) >= 20; 
   const needsTeaser = model.featured || isHot;
+
+  const handleNextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
+  };
+
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setCurrentImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  };
 
   useEffect(() => {
     if (isOpen && needsTeaser) {
@@ -127,44 +144,86 @@ export default function ModelDetail({
 
             <div className="flex-1 overflow-y-auto custom-scrollbar">
               <div className="flex flex-col min-h-full">
-                {/* Image Section */}
+                {/* Image / Gallery Section */}
                 <div 
-                  className="relative w-full aspect-square overflow-hidden"
+                  className="relative w-full aspect-square overflow-hidden bg-black"
                 >
-                  {isVideoUrl(thumbnail) ? (
-                    <motion.video
-                      src={thumbnail}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      initial={{ scale: 1.15 }}
-                      animate={{ 
-                        scale: showTeaser ? 1.05 : 1.0, 
-                        filter: showTeaser ? "blur(14px)" : "blur(0px)" 
-                      }}
-                      transition={{ 
-                        scale: { duration: 3, ease: "linear" },
-                        filter: { duration: 1, ease: "easeInOut" }
-                      }}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <motion.img
-                      src={thumbnail}
-                      alt={model.name}
-                      initial={{ scale: 1.15 }}
-                      animate={{ 
-                        scale: showTeaser ? 1.05 : 1.0, 
-                        filter: showTeaser ? "blur(14px)" : "blur(0px)" 
-                       }}
-                      transition={{ 
-                        scale: { duration: 3, ease: "linear" },
-                        filter: { duration: 1, ease: "easeInOut" }
-                      }}
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentImageIndex}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-full h-full"
+                    >
+                      {isVideoUrl(currentImageUrl) ? (
+                        <motion.video
+                          src={currentImageUrl}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          initial={{ scale: 1.15 }}
+                          animate={{ 
+                            scale: showTeaser ? 1.05 : 1.0, 
+                            filter: showTeaser ? "blur(14px)" : "blur(0px)" 
+                          }}
+                          transition={{ 
+                            scale: { duration: 3, ease: "linear" },
+                            filter: { duration: 1, ease: "easeInOut" }
+                          }}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <motion.img
+                          src={currentImageUrl}
+                          alt={model.name}
+                          initial={{ scale: 1.15 }}
+                          animate={{ 
+                            scale: showTeaser ? 1.05 : 1.0, 
+                            filter: showTeaser ? "blur(14px)" : "blur(0px)" 
+                          }}
+                          transition={{ 
+                            scale: { duration: 3, ease: "linear" },
+                            filter: { duration: 1, ease: "easeInOut" }
+                          }}
+                          className="w-full h-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                  
+                  {/* Gallery Navigation UI */}
+                  {galleryImages.length > 1 && !showTeaser && (
+                    <>
+                      <button 
+                        onClick={handlePrevImage}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/40 border border-white/10 text-white z-50 hover:bg-black/60 transition-all"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={handleNextImage}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/40 border border-white/10 text-white z-50 hover:bg-black/60 transition-all"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                      
+                      {/* Pagination Dots */}
+                      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1.5 z-50">
+                        {galleryImages.map((_, i) => (
+                          <div 
+                            key={i}
+                            className={cn(
+                              "w-1.5 h-1.5 rounded-full transition-all duration-300",
+                              i === currentImageIndex ? "bg-gold w-4" : "bg-white/20"
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </>
                   )}
                   
                   {/* Teaser Overlay Detail */}

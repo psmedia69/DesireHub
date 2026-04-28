@@ -70,7 +70,7 @@ export default function SensualBanner({ viewMode }: SensualBannerProps) {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.8, duration: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
             className="mt-8 group/tg relative overflow-hidden px-6 sm:px-10 py-4 sm:py-6 bg-blue-600/10 backdrop-blur-2xl border border-white/10 rounded-[30px] flex items-center gap-5 sm:gap-7 max-w-fit shadow-[0_20px_50px_rgba(37,99,235,0.2)] hover:border-blue-500/50 transition-all duration-500 hover:scale-[1.02]"
           >
             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-600 flex items-center justify-center shadow-[0_0_40px_rgba(37,99,235,0.6)] group-hover/tg:scale-110 transition-transform duration-500 shrink-0">

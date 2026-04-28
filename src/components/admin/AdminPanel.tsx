@@ -411,7 +411,7 @@ export default function AdminPanel({ onModelAdded, models = [] }: AdminPanelProp
                     value={formData.galleryUrls}
                     onChange={e => setFormData({...formData, galleryUrls: e.target.value})}
                     className="w-full px-6 py-4 h-32 rounded-2xl bg-white/5 border border-white/10 focus:border-gold/40 outline-none transition-all text-white text-xs resize-none font-bold"
-                    placeholder="Input multiple stream assets..."
+                    placeholder="Input multiple links (one per line or separated by comma) to create a swipeable gallery..."
                   />
                 </div>
 
