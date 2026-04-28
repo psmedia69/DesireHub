@@ -106,13 +106,24 @@ const TrendingSection = ({ models, onCardClick, viewMode }: TrendingSectionProps
               <div className="relative aspect-[4/5] rounded-xl overflow-hidden border border-white/10 glass-premium group-hover:border-pink-500/50 transition-all duration-500 shadow-md transform-gpu">
                 <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent opacity-80 z-10" />
                 
-                <img 
-                  src={sanitizeImageUrl(model.thumbnail)} 
-                  alt={model.name} 
-                  loading="lazy"
-                  className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700"
-                  referrerPolicy="no-referrer"
-                />
+                {isVideoUrl(sanitizeImageUrl(model.thumbnail)) ? (
+                  <video 
+                    src={sanitizeImageUrl(model.thumbnail)} 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline 
+                    className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700" 
+                  />
+                ) : (
+                  <img 
+                    src={sanitizeImageUrl(model.thumbnail)} 
+                    alt={model.name} 
+                    loading="lazy"
+                    className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                )}
 
                 <div className="absolute top-2 left-2 z-20 px-1.5 py-0.5 rounded bg-black/80 border border-white/10 text-[7px] font-black font-mono text-pink-400 flex items-center gap-1">
                   <Star className="w-2 h-2 fill-pink-400 stroke-pink-400" />

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ShieldCheck, ChevronRight, Lock, Globe, Loader2 } from 'lucide-react';
 import { ModelProfile } from '../../types';
 import { cn } from '../../lib/utils';
+import { sanitizeImageUrl, isVideoUrl } from '../../lib/imageUtils';
 
 interface RedirectScreenProps {
   model: ModelProfile | null;
@@ -168,7 +169,23 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
   
                   <div className="flex flex-col items-center gap-3 relative z-10">
                     <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/20">
-                      <img src={model.thumbnail} alt={model.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      {isVideoUrl(sanitizeImageUrl(model.thumbnail)) ? (
+                        <video 
+                          src={sanitizeImageUrl(model.thumbnail)} 
+                          autoPlay 
+                          loop 
+                          muted 
+                          playsInline 
+                          className="w-full h-full object-cover" 
+                        />
+                      ) : (
+                        <img 
+                          src={sanitizeImageUrl(model.thumbnail)} 
+                          alt={model.name} 
+                          className="w-full h-full object-cover" 
+                          referrerPolicy="no-referrer" 
+                        />
+                      )}
                     </div>
                     <span className={cn("text-[9px] font-black uppercase tracking-widest", model.featured ? "text-blue-500" : "text-gold")}>{model.name}</span>
                   </div>
