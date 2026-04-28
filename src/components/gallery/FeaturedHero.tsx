@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ModelProfile } from '@/src/types';
 import { isVideoUrl, sanitizeImageUrl } from '@/src/lib/imageUtils';
@@ -11,6 +11,14 @@ interface FeaturedHeroProps {
 
 export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
   const thumbnail = sanitizeImageUrl(model.thumbnail);
+  const [showTeaser, setShowTeaser] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowTeaser(true);
+    }, 4000); // Slightly longer for the hero
+    return () => clearTimeout(timer);
+  }, []);
   
   const handleUnlock = (e: React.MouseEvent) => {
     if (onRedirect && model.socials?.instagram) {
@@ -30,18 +38,36 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
       {/* Background Image with Cinematic Effects */}
       <div className="absolute inset-0">
         {isVideoUrl(thumbnail) ? (
-          <video
+          <motion.video
             src={thumbnail}
             autoPlay
             loop
             muted
             playsInline
+            initial={{ scale: 1.15 }}
+            animate={{ 
+              scale: showTeaser ? 1.05 : 1.0,
+              filter: showTeaser ? "blur(12px)" : "blur(0px)"
+            }}
+            transition={{ 
+              scale: { duration: 4, ease: "linear" },
+              filter: { duration: 1.5, ease: "easeInOut" }
+            }}
             className="w-full h-full object-cover"
           />
         ) : (
-          <img 
+          <motion.img 
             src={thumbnail} 
             alt={model.name}
+            initial={{ scale: 1.15 }}
+            animate={{ 
+              scale: showTeaser ? 1.05 : 1.0,
+              filter: showTeaser ? "blur(12px)" : "blur(0px)"
+            }}
+            transition={{ 
+              scale: { duration: 4, ease: "linear" },
+              filter: { duration: 1.5, ease: "easeInOut" }
+            }}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
@@ -61,7 +87,7 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
         >
           <div className="px-5 py-2 bg-linear-to-r from-blue-700 via-blue-600 to-indigo-800 rounded-full flex items-center gap-2 text-white font-black text-[10px] uppercase tracking-[0.25em] shadow-[0_0_40px_rgba(30,64,175,0.4)] border border-white/10">
             <Star className="w-3 h-3 fill-white" />
-            Elite Selection
+            Admin's Pick
           </div>
           <div className="px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-white/70 text-[9px] font-black uppercase tracking-[0.2em]">
             Verified Direct

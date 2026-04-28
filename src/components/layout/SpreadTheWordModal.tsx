@@ -16,8 +16,8 @@ export default function SpreadTheWordModal({ isOpen, onClose }: SpreadTheWordMod
   
   const marketingCaptions = [
     {
-      title: "The Elite Directory",
-      text: `Check out the new Elite Model Directory! 🥵\nAll the best desi & international models in one place.\n\nVisit now: ${promoLink}\nJoin our TG: https://t.me/+fiYQGTL55EdkMDI1`
+      title: "The Premium Directory",
+      text: `Check out the new Premium Model Directory! 🥵\nAll the best desi & international models in one place.\n\nVisit now: ${promoLink}\nJoin our TG: https://t.me/+fiYQGTL55EdkMDI1`
     },
     {
       title: "Desire HUB Launch",

@@ -98,29 +98,40 @@ const TrendingSection = ({ models, onCardClick, viewMode }: TrendingSectionProps
           {[...sortedModels, ...sortedModels, ...sortedModels].map((model, idx) => (
             <div
               key={`trending-${model.id}-${idx}`}
-              className="flex-none w-36 group cursor-pointer pointer-events-auto h-fit transition-transform hover:-translate-y-1 hover:scale-105"
-              onClick={() => {
-                onCardClick?.(model);
-              }}
+              className="flex-none w-36 group h-fit transition-transform hover:-translate-y-1 hover:scale-105"
             >
               <div className="relative aspect-[4/5] rounded-xl overflow-hidden border border-white/10 glass-premium group-hover:border-pink-500/50 transition-all duration-500 shadow-md transform-gpu">
                 <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent opacity-80 z-10" />
                 
                 {isVideoUrl(sanitizeImageUrl(model.thumbnail)) ? (
-                  <video 
+                  <motion.video 
                     src={sanitizeImageUrl(model.thumbnail)} 
                     autoPlay 
                     loop 
                     muted 
                     playsInline 
-                    className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-[filter] duration-700" 
+                    initial={{ scale: 1.15, filter: "blur(3px) grayscale(10%)" }}
+                    animate={{ scale: 1.0, filter: "blur(3px) grayscale(10%)" }}
+                    whileHover={{ filter: "blur(0px) grayscale(0%)" }}
+                    transition={{ 
+                      scale: {
+                        duration: 8, 
+                        repeat: Infinity, 
+                        repeatType: "reverse",
+                        ease: "easeInOut"
+                      },
+                      filter: { duration: 0.5 }
+                    }}
+                    className="w-full h-full object-cover" 
                   />
                 ) : (
-                  <img 
+                  <motion.img 
                     src={sanitizeImageUrl(model.thumbnail)} 
                     alt={model.name} 
                     loading="lazy"
-                    className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700"
+                    initial={{ filter: "blur(3px) grayscale(10%)" }}
+                    whileHover={{ filter: "blur(0px) grayscale(0%)" }}
+                    className="w-full h-full object-cover transition-all duration-700"
                     referrerPolicy="no-referrer"
                   />
                 )}

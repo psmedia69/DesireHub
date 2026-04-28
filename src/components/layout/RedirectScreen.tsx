@@ -192,8 +192,34 @@ export default function RedirectScreen({ model, isOpen, onComplete, onCancel, du
                 </div>
 
               {/* Progress & Disclaimer */}
-              <div className="space-y-6">
-                <div className="space-y-3">
+                <div className="space-y-6">
+                  {/* Visitor Count Social Proof */}
+                  <div className="flex flex-col items-center">
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200 }}
+                      className="px-6 py-2.5 bg-linear-to-r from-orange-600/20 via-red-600/20 to-orange-600/20 border border-red-500/30 rounded-2xl flex items-center gap-3 backdrop-blur-sm shadow-[0_0_20px_rgba(239,68,68,0.1)] group cursor-default"
+                    >
+                      <motion.span 
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="text-lg"
+                      >
+                        🔥
+                      </motion.span>
+                      <div className="flex flex-col items-start leading-none gap-0.5">
+                        <span className="text-white font-black text-[11px] sm:text-xs uppercase tracking-[0.1em]">
+                          {Math.floor((model.views || 0) * 0.2 + (model.clicks || 0) * 1.5 + 242).toLocaleString()} Users
+                        </span>
+                        <span className="text-white/60 font-medium text-[9px] uppercase tracking-widest">
+                          unlocked this profile till yet
+                        </span>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  <div className="space-y-3">
                   <div className="flex justify-between items-end">
                     <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">Establishing Connection...</span>
                     <span className={cn("text-[10px] font-black font-mono", model.featured ? "text-blue-500" : "text-gold")}>{Math.round(progress)}%</span>

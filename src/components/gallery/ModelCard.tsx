@@ -1,12 +1,11 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
 import { ModelProfile } from "@/src/types";
 import { motion, AnimatePresence } from "motion/react";
-import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye, Compass, ShieldCheck } from "lucide-react";
+import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye, Compass, ShieldCheck, Lock, Video } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { supabase } from "@/src/lib/supabase";
 import { toast } from "sonner";
 import { isVideoUrl, sanitizeImageUrl } from "@/src/lib/imageUtils";
-import ImageLightbox from "./ImageLightbox";
 
 interface ModelCardProps {
   model: ModelProfile;
@@ -27,12 +26,25 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   const [isDeleting, setIsDeleting] = useState(false);
   const [localClicks, setLocalClicks] = useState(model.clicks || 0);
   const [localViews, setLocalViews] = useState(model.views || 0);
-  const [lightboxIndex, setLightboxIndex] = useState(-1);
+  const [showTeaser, setShowTeaser] = useState(false);
 
   // Derived Status
   const isElite = localClicks >= 100;
   const isTrending = localViews >= 100;
   const isHot = localClicks >= 20 && localClicks < 100;
+  const needsTeaser = model.featured || isHot;
+
+  // Teaser logic for Admin's Pick or Hot
+  useEffect(() => {
+    if (needsTeaser) {
+      const timer = setTimeout(() => {
+        setShowTeaser(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowTeaser(false);
+    }
+  }, [needsTeaser]);
 
   const handleExpand = async () => {
     // Trigger detail view immediately for better UX
@@ -167,7 +179,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
       {/* Luxury Light Sweep - Removed for clarity */}
 
       {/* Featured Badge */}
-      <div className="absolute top-4 right-4 z-30 flex flex-col items-end gap-2">
+      <div className="absolute top-4 right-4 z-[100] flex flex-col items-end gap-2 drop-shadow-lg">
         {model.featured && (
           <div className="relative flex items-center justify-center">
             <div className="relative px-4 py-1.5 bg-linear-to-r from-blue-600 via-cyan-400 to-blue-500 rounded-full flex items-center gap-2 shadow-lg border border-white/40 glass-blur">
@@ -179,7 +191,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         {isElite && !model.featured && (
           <div className="relative px-3 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center gap-1 shadow-lg border border-white/20">
             <Sparkles className="w-3 h-3 text-white" />
-            <span className="text-[10px] font-black tracking-widest text-white uppercase">Elite</span>
+            <span className="text-[10px] font-black tracking-widest text-white uppercase">Top Rated</span>
           </div>
         )}
         {isTrending && (
@@ -198,28 +210,89 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
 
       {/* Image Container */}
       <div 
-        className="aspect-[4/5] md:aspect-square overflow-hidden relative cursor-pointer"
-        onClick={handleExpand}
+        className="aspect-[4/5] md:aspect-square overflow-hidden relative"
       >
         {isVideoUrl(thumbnail) ? (
-          <video
+          <motion.video
             src={thumbnail}
             autoPlay
             loop
             muted
             playsInline
+            initial={{ scale: 1.1 }}
+            animate={{ 
+              scale: showTeaser ? 1.05 : 1.0, 
+              filter: showTeaser ? "blur(12px)" : "blur(0px)" 
+            }}
+            transition={{ 
+              scale: { duration: 3, ease: "linear" },
+              filter: { duration: 0.8, ease: "easeOut" }
+            }}
             className="w-full h-full object-cover"
           />
         ) : (
-          <img
+          <motion.img
             src={thumbnail}
             alt={model.name}
             loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            initial={{ scale: 1.1 }}
+            animate={{ 
+              scale: showTeaser ? 1.05 : 1.0,
+              filter: showTeaser ? "blur(12px)" : "blur(0px)"
+            }}
+            transition={{ 
+              scale: { duration: 3, ease: "linear" },
+              filter: { duration: 0.8, ease: "easeOut" }
+            }}
+            className={cn(
+              "w-full h-full object-cover",
+              !showTeaser && "group-hover:scale-105 transition-transform duration-700"
+            )}
             referrerPolicy="no-referrer"
           />
         )}
         
+        {/* Teaser Message Overlay */}
+        <AnimatePresence>
+          {showTeaser && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute inset-0 z-40 bg-black/40 backdrop-blur-[1px] flex flex-col items-center justify-center p-6 text-center select-none"
+            >
+              <motion.div 
+                animate={{ 
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, -5, 0]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="bg-gold p-3 rounded-full mb-4 shadow-[0_0_30px_rgba(212,175,55,0.6)]"
+              >
+                <Lock className="w-6 h-6 text-black" />
+              </motion.div>
+              
+              <div className="space-y-1">
+                <h5 className="text-white font-black text-xs sm:text-sm uppercase tracking-[0.25em] leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  Click <span className="text-gold italic underline decoration-gold/30 underline-offset-4">
+                    '{model.featured ? "Admin's pick" : "Unlock Access"}'
+                  </span>
+                </h5>
+                <p className="text-white font-black text-[10px] sm:text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 drop-shadow-md">
+                  FOR FREE ACCESS <Video className="w-4 h-4 text-gold animate-pulse" />
+                </p>
+              </div>
+              
+              {/* Subtle pulsing ring */}
+              <motion.div 
+                animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="absolute w-24 h-24 rounded-full border border-gold/30 pointer-events-none"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
         
@@ -303,12 +376,6 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
           </div>
           
           <div className="flex flex-col items-end gap-2 pointer-events-auto">
-            {model.featured && (
-              <div className="flex items-center gap-1.5 px-3 py-1 bg-black/60 rounded-full border border-white/10">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-500" /> 
-                <span className="text-[9px] uppercase font-bold tracking-widest text-white/90">Live</span>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -413,7 +480,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
               {model.featured ? (
                 <>
                   <Compass className="w-3.5 h-3.5 animate-pulse" />
-                  <span>ELITE SELECTION</span>
+                  <span>ADMIN'S PICK</span>
                 </>
               ) : (
                 <>
@@ -426,12 +493,6 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         </div>
       </div>
 
-      <ImageLightbox
-        images={images}
-        initialIndex={lightboxIndex}
-        isOpen={lightboxIndex >= 0}
-        onClose={() => setLightboxIndex(-1)}
-      />
     </motion.div>
   );
 }

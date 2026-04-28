@@ -10,6 +10,7 @@ import EditModelModal from "./components/admin/EditModelModal";
 import TrendingSection from "./components/gallery/TrendingSection";
 import ModelDetail from "./components/gallery/ModelDetail";
 import PromotionBanner from "./components/layout/PromotionBanner";
+import SensualBanner from "./components/layout/SensualBanner";
 import SpreadTheWordModal from "./components/layout/SpreadTheWordModal";
 import AgeVerification from "./components/layout/AgeVerification";
 import { ViewModePopup } from "./components/layout/ViewModePopup";
@@ -267,8 +268,14 @@ export default function App() {
   const filteredModels = useMemo(() => {
     if (sortOption === "random") {
       return [...supabaseModels].sort((a, b) => {
-        const valA = Math.sin(Number(a.id.replace(/\D/g, '')) || 0 + randomSeed) * 10000;
-        const valB = Math.sin(Number(b.id.replace(/\D/g, '')) || 0 + randomSeed) * 10000;
+        // Improved pseudo-random sort that handles non-numeric IDs (like UUIDs)
+        const strHash = (s: string) => {
+          let h = 0;
+          for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+          return h;
+        };
+        const valA = Math.sin(strHash(a.id) + randomSeed) * 10000;
+        const valB = Math.sin(strHash(b.id) + randomSeed) * 10000;
         return (valA % 1) - (valB % 1);
       });
     }
@@ -353,12 +360,13 @@ export default function App() {
   const handleSurpriseMe = () => {
     setIsShuffling(true);
     setSortOption("random");
-    setRandomSeed(Math.random());
+    // Use a large random multiplier to ensure Sin produces a very different result each time
+    setRandomSeed(Math.random() * 1000);
     
     setTimeout(() => {
       setIsShuffling(false);
       toast.success('System randomized! Enjoy the discovery 🥵', { icon: '🎲' });
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      // Removed auto-scroll as requested to stay in the posts area
     }, 800);
   };
 
@@ -445,6 +453,8 @@ export default function App() {
           onCardClick={(m) => setSelectedModelForDetail(m)} 
           viewMode={viewMode}
         />
+
+        <SensualBanner viewMode={viewMode} />
 
         <PromotionBanner />
 
