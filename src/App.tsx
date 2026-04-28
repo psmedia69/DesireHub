@@ -11,11 +11,9 @@ import TrendingSection from "./components/gallery/TrendingSection";
 import ModelDetail from "./components/gallery/ModelDetail";
 import PromotionBanner from "./components/layout/PromotionBanner";
 import SpreadTheWordModal from "./components/layout/SpreadTheWordModal";
-import DynamicAtmosphere from "./components/layout/DynamicAtmosphere";
 import AgeVerification from "./components/layout/AgeVerification";
 import { ViewModePopup } from "./components/layout/ViewModePopup";
 import RedirectScreen from "./components/layout/RedirectScreen";
-import MagneticCursor from "./components/layout/MagneticCursor";
 import BackToTop from "./components/ui/BackToTop";
 import { ModelProfile, ModelCategory, SortOption } from "./types";
 import { motion, AnimatePresence } from "motion/react";
@@ -385,9 +383,6 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen selection:bg-gold/30 overflow-x-hidden">
-      <div className="premium-grain" />
-      <div className="premium-scanline" />
-      <MagneticCursor />
       <AgeVerification onVerify={() => setIsAgeVerified(true)} />
       
       {isAgeVerified && !isModeSelected && (

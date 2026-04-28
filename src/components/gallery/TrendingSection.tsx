@@ -107,20 +107,12 @@ const TrendingSection = ({ models, onCardClick, viewMode }: TrendingSectionProps
                 <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent opacity-80 z-10" />
                 
                 {isVideoUrl(sanitizeImageUrl(model.thumbnail)) ? (
-                  <motion.video 
+                  <video 
                     src={sanitizeImageUrl(model.thumbnail)} 
                     autoPlay 
                     loop 
                     muted 
                     playsInline 
-                    initial={{ scale: 1.15 }}
-                    animate={{ scale: 1.0 }}
-                    transition={{ 
-                      duration: 8, 
-                      repeat: Infinity, 
-                      repeatType: "reverse",
-                      ease: "easeInOut"
-                    }}
                     className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-[filter] duration-700" 
                   />
                 ) : (

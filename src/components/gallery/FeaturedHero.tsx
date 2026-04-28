@@ -36,13 +36,13 @@ export default function FeaturedHero({ model, onRedirect }: FeaturedHeroProps) {
             loop
             muted
             playsInline
-            className="w-full h-full object-cover transition-transform duration-[4s] ease-out group-hover:scale-110"
+            className="w-full h-full object-cover"
           />
         ) : (
           <img 
             src={thumbnail} 
             alt={model.name}
-            className="w-full h-full object-cover transition-transform duration-[4s] ease-out group-hover:scale-110"
+            className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
         )}

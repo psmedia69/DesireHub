@@ -202,20 +202,12 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         onClick={handleExpand}
       >
         {isVideoUrl(thumbnail) ? (
-          <motion.video
+          <video
             src={thumbnail}
             autoPlay
             loop
             muted
             playsInline
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1.0 }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity, 
-              repeatType: "reverse",
-              ease: "easeInOut" 
-            }}
             className="w-full h-full object-cover"
           />
         ) : (
