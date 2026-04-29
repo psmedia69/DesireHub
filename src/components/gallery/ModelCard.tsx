@@ -29,7 +29,6 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   const fakeViews = useMemo(() => getFakeViews(model.views || 0, model.createdAt), [model.views, model.createdAt]);
   const [localViews, setLocalViews] = useState(fakeViews);
   const [showTeaser, setShowTeaser] = useState(false);
-  const [isTeasing, setIsTeasing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -280,7 +279,7 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
             initial={{ opacity: 0, filter: "blur(9px)", scale: 1.05 }}
             animate={{ 
               opacity: isVisible ? 1 : 0, 
-              filter: showTeaser ? (isTeasing ? "blur(3px)" : "blur(9px)") : "blur(0px)",
+              filter: showTeaser ? "blur(9px)" : "blur(0px)",
               scale: showTeaser ? 1.02 : 1.0
             }}
             exit={{ opacity: 0, filter: "blur(9px)", scale: 0.98 }}
@@ -349,10 +348,6 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              onMouseEnter={() => setIsTeasing(true)}
-              onMouseLeave={() => setIsTeasing(false)}
-              onTouchStart={() => setIsTeasing(true)}
-              onTouchEnd={() => setIsTeasing(false)}
               className="absolute inset-0 z-40 bg-black/40 backdrop-blur-[1px] flex flex-col items-center justify-center p-6 text-center select-none"
             >
               <motion.div 
