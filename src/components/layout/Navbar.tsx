@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, Menu, X, User, LogOut, ShieldCheck, MousePointer2, Compass, Star, Briefcase, Heart, Eye, Instagram, Twitter, Facebook, Megaphone } from "lucide-react";
+import { Search, Menu, X, User, LogOut, ShieldCheck, MousePointer2, Compass, Star, Briefcase, Heart, Eye, Send, Megaphone } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "@/src/lib/supabase";
 import { cn } from "@/src/lib/utils";

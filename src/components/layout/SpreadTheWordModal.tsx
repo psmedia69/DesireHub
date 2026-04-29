@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Send, Twitter, Link, Download, Check, Copy, Megaphone, Share2 } from 'lucide-react';
+import { X, Send, Link, Download, Check, Copy, Megaphone, Share2 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { toast } from 'sonner';
 
@@ -34,10 +34,6 @@ export default function SpreadTheWordModal({ isOpen, onClose }: SpreadTheWordMod
     setCopiedIndex(index);
     toast.success('Campaign text copied!', { icon: '📋' });
     setTimeout(() => setCopiedIndex(null), 2000);
-  };
-
-  const handleTweet = (text: string) => {
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   return (
@@ -101,13 +97,6 @@ export default function SpreadTheWordModal({ isOpen, onClose }: SpreadTheWordMod
                             title="Copy to clipboard"
                           >
                             {copiedIndex === idx ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                          </button>
-                          <button 
-                            onClick={() => handleTweet(caption.text)}
-                            className="p-2 rounded-lg bg-white/5 hover:bg-blue-400/20 text-white/60 hover:text-blue-400 transition-all"
-                            title="Share on Twitter"
-                          >
-                            <Twitter className="w-4 h-4" />
                           </button>
                         </div>
                       </div>

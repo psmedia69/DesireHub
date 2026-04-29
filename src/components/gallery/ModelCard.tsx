@@ -1,7 +1,7 @@
 import React, { useState, memo, useEffect, useMemo, useRef } from "react";
 import { ModelProfile } from "@/src/types";
 import { motion, AnimatePresence } from "motion/react";
-import { Instagram, Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye, Compass, ShieldCheck, Lock, Video } from "lucide-react";
+import { Edit3, Trash2, AlertTriangle, Loader2, MousePointer2, ChevronDown, Heart, Share2, Star, Flame, Sparkles, Eye, Compass, ShieldCheck, Lock, Video } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { supabase } from "@/src/lib/supabase";
 import { toast } from "sonner";
