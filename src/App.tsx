@@ -16,7 +16,6 @@ import AgeVerification from "./components/layout/AgeVerification";
 import { ViewModePopup } from "./components/layout/ViewModePopup";
 import RedirectScreen from "./components/layout/RedirectScreen";
 import ScrollTriggerPopup from "./components/layout/ScrollTriggerPopup";
-import ExitIntentModal from "./components/layout/ExitIntentModal";
 import InFeedCTA from "./components/layout/InFeedCTA";
 import BackToTop from "./components/ui/BackToTop";
 import { ModelProfile, ModelCategory, SortOption } from "./types";
@@ -804,7 +803,6 @@ export default function App() {
         />
 
         <ScrollTriggerPopup />
-        <ExitIntentModal onContinue={handleSurpriseMe} />
         </div>
       </main>
 
