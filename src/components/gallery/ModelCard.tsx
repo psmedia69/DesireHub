@@ -19,10 +19,24 @@ interface ModelCardProps {
   onCardClick?: (model: ModelProfile) => void;
   onCountryClick?: (country: string) => void;
   onRedirect?: (model: ModelProfile, url: string) => void;
+  isLowDataMode?: boolean;
   className?: string;
 }
 
-function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onToggleFavorite, onInteraction, onCardClick, onCountryClick, onRedirect, className }: ModelCardProps) {
+function ModelCard({ 
+  model, 
+  isAdmin, 
+  onEdit, 
+  onDeleteSuccess, 
+  isFavorite, 
+  onToggleFavorite, 
+  onInteraction, 
+  onCardClick, 
+  onCountryClick, 
+  onRedirect, 
+  isLowDataMode = false,
+  className 
+}: ModelCardProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [localClicks, setLocalClicks] = useState(model.clicks || 0);
@@ -32,13 +46,16 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Visibility Tracking to optimize mobile performance
+  // Visibility Tracking to optimize mobile performance - Enhanced for Low Data
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.05, rootMargin: '50px' } 
+      { 
+        threshold: isLowDataMode ? 0.1 : 0.05, 
+        rootMargin: isLowDataMode ? '25px' : '50px' 
+      } 
     );
 
     if (containerRef.current) {
@@ -113,12 +130,14 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
   useEffect(() => {
     if (images.length <= 1 || !isVisible) return;
     
+    const stepDuration = isLowDataMode ? SECONDS_PER_STEP * 3 : SECONDS_PER_STEP;
+    
     const interval = setInterval(() => {
       setTotalSteps(prev => prev + 1);
-    }, SECONDS_PER_STEP * 1000);
+    }, stepDuration * 1000);
     
     return () => clearInterval(interval);
-  }, [images.length, isVisible]);
+  }, [images.length, isVisible, isLowDataMode]);
 
   const currentMediaIndex = totalSteps % images.length;
   const currentMediaRound = Math.floor(totalSteps / images.length);
@@ -215,23 +234,24 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
       style={{
         transformStyle: "preserve-3d",
         transform: "translateZ(0)",
-        willChange: "transform, opacity"
+        willChange: isLowDataMode ? "auto" : "transform, opacity"
       }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
+        viewport={{ once: true, margin: isLowDataMode ? "0px" : "-50px" }}
         transition={{ 
-          duration: 0.6,
-          ease: [0.22, 1, 0.36, 1] // Custom luxury ease
+          duration: isLowDataMode ? 0.3 : 0.6,
+          ease: isLowDataMode ? "easeOut" : [0.22, 1, 0.36, 1]
         }}
-        whileHover={{ 
+        whileHover={isLowDataMode ? {} : { 
           y: -8,
           scale: 1.01,
           transition: { duration: 0.4, ease: "easeOut" }
         }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: isLowDataMode ? 0.99 : 0.98 }}
       className={cn(
         "group relative glass-premium rounded-[32px] overflow-hidden transition-all duration-300 h-fit premium-border",
         model.featured ? "ring-[1px] ring-white/10" : "hover:ring-1 hover:ring-white/20",
+        isLowDataMode && "backdrop-blur-none bg-black/60",
         className
       )}
     >
@@ -276,15 +296,15 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
         <AnimatePresence mode="wait">
           <motion.div
             key={`${model.id}-${currentMediaIndex}-${currentMediaRound}`}
-            initial={{ opacity: 0, filter: "blur(9px)", scale: 1.05 }}
+            initial={isLowDataMode ? { opacity: 0 } : { opacity: 0, filter: "blur(9px)", scale: 1.05 }}
             animate={{ 
               opacity: isVisible ? 1 : 0, 
-              filter: showTeaser ? "blur(9px)" : "blur(0px)",
-              scale: showTeaser ? 1.02 : 1.0
+              filter: showTeaser ? (isLowDataMode ? "blur(4px)" : "blur(9px)") : "blur(0px)",
+              scale: showTeaser ? (isLowDataMode ? 1 : 1.02) : 1.0
             }}
-            exit={{ opacity: 0, filter: "blur(9px)", scale: 0.98 }}
+            exit={{ opacity: 0, filter: isLowDataMode ? "none" : "blur(9px)", scale: isLowDataMode ? 1 : 0.98 }}
             transition={{ 
-              duration: 1.0,
+              duration: isLowDataMode ? 0.3 : 1.0,
               ease: "easeInOut"
             }}
             className="w-full h-full absolute inset-0 will-change-[opacity,filter,transform]"
@@ -547,8 +567,8 @@ function ModelCard({ model, isAdmin, onEdit, onDeleteSuccess, isFavorite, onTogg
           
           <motion.button 
             onClick={handleLinkClick}
-            whileHover={{ y: -3, scale: 1.01 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={isLowDataMode ? { scale: 1.01 } : { y: -3, scale: 1.01 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             whileTap={{ scale: 0.98 }}
             style={{
               background: model.featured 
@@ -592,6 +612,7 @@ export default memo(ModelCard, (prevProps, nextProps) => {
     prevProps.isFavorite === nextProps.isFavorite &&
     prevProps.isAdmin === nextProps.isAdmin &&
     prevProps.model.views === nextProps.model.views &&
-    prevProps.model.clicks === nextProps.model.clicks
+    prevProps.model.clicks === nextProps.model.clicks &&
+    prevProps.isLowDataMode === nextProps.isLowDataMode
   );
 });

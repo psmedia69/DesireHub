@@ -32,6 +32,7 @@ export default function App() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [countryFilter, setCountryFilter] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("Web");
+  const [isLowDataMode, setIsLowDataMode] = useState(false);
   const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [isModeSelected, setIsModeSelected] = useState(false);
   const [isSpreadTheWordOpen, setIsSpreadTheWordOpen] = useState(false);
@@ -396,10 +397,11 @@ export default function App() {
       <AgeVerification onVerify={() => setIsAgeVerified(true)} />
       
       {isAgeVerified && !isModeSelected && (
-        <ViewModePopup onSelect={(mode) => {
+        <ViewModePopup onSelect={(mode, isLowData) => {
           setViewMode(mode);
+          setIsLowDataMode(isLowData);
           setIsModeSelected(true);
-          toast.success(`Mode set to ${mode}`, { icon: '🚀' });
+          toast.success(`Mode set to ${mode}${isLowData ? ' (Optimized)' : ''}`, { icon: '🚀' });
         }} />
       )}
       
@@ -677,6 +679,7 @@ export default function App() {
                     <ModelCard 
                       model={model} 
                       isAdmin={!!user} 
+                      isLowDataMode={isLowDataMode}
                       onEdit={(m) => setEditingModel(m)}
                       onDeleteSuccess={fetchSupabaseModels}
                       isFavorite={favorites.includes(model.id)}
